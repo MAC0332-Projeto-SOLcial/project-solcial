@@ -1,4 +1,4 @@
-# SOLCial - Projeto de Engenharia de Software
+# Projeto SOLCial - MAC0332 Engenharia de Software
 
 ## Descrição do Projeto
 
