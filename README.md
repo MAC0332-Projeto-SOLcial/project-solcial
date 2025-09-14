@@ -11,7 +11,7 @@ O SOLCial é uma aplicação web que visa tornar a energia solar mais acessível
 ## Tecnologias Utilizadas
 
 - **Frontend**: React + Tailwind CSS
-- **Backend**: Node.js
+- **Backend**: Node.js + Express
 - **API**: Google Solar API
 
 ## Estrutura do Projeto
