@@ -1,5 +1,4 @@
 import { Button } from "../ui/button";
-import { ImageWithFallback } from "./ImageWithFallback";
 import { Sun, Leaf, Zap } from "lucide-react";
 
 const Homepage = ({ onGetStarted, onComoFunciona, onSobreNos }) => {
@@ -49,7 +48,7 @@ const Homepage = ({ onGetStarted, onComoFunciona, onSobreNos }) => {
             investimento e impacto ambiental em poucos cliques.
           </p>
           
-          {/* Features */}
+        
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 lg:mb-12">
             <div className="flex flex-col items-center lg:items-start">
               <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-3">
@@ -91,7 +90,7 @@ const Homepage = ({ onGetStarted, onComoFunciona, onSobreNos }) => {
         {/* Right Image */}
         <div className="flex-1 max-w-2xl">
           <div className="relative">
-            <ImageWithFallback
+            <img
               src="https://images.unsplash.com/photo-1655300283247-6b1924b1d152?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzb2xhciUyMHBhbmVscyUyMGhvdXNlJTIwcm9vZnRvcHxlbnwxfHx8fDE3NTkwNzY1MDR8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
               alt="Casa com painéis solares no telhado"
               className="w-full h-auto rounded-2xl shadow-2xl"
