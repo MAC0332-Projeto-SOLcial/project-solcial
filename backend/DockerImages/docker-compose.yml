@@ -12,13 +12,13 @@ services:
 
   mongo-express:
     image: mongo-express # Usa a imagem oficial do Mongo Express
-    container_name: meu-mongo-express # Nome para o contêiner do Mongo Express
+    container_name: solsocialDb # Nome para o contêiner do Mongo Express
     ports:
       - "8081:8081" # Expõe a porta 8081 do contêiner para a máquina local
     environment:
       ME_CONFIG_MONGODB_URL: mongodb://admin:solcial@mongodb:27017/ # URL de conexão para o MongoDB
       ME_CONFIG_BASICAUTH_USERNAME: user # Nome de usuário para o Mongo Express
-      ME_CONFIG_BASICAUTH_PASSWORD: solcial # Senha para o Mongo Express (altere para uma senha segura!)
+      ME_CONFIG_BASICAUTH_PASSWORD: solcial   # Senha para o Mongo Express (altere para uma senha segura!)
     depends_on: # Garante que o contêiner do MongoDB inicie primeiro
       - mongodb
 
