@@ -12,7 +12,7 @@ O SOLCial é uma aplicação web que visa tornar a energia solar mais acessível
 
 - **Frontend**: React + Tailwind CSS
 - **Backend**: Node.js + Express
-- **API**: Google Solar API
+- **API**: Google Solar API e Google GeoCoding API
 
 ## Estrutura do Projeto
 
