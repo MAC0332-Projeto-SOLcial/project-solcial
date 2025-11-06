@@ -1,0 +1,5 @@
+# Adicione esta linha para ignorar o arquivo .env
+.env
+node_modules/
+*.log
+.DS_Store
