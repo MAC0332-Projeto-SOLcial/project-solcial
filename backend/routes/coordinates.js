@@ -21,8 +21,10 @@ router.get('/', async (req, res) => {
     const { address } = req.body;
     const geocodingResponse = await geocoding(address);
     const location = geocodingResponse.results[0].geometry.location;
+    const formattedAddress = geocodingResponse.results[0].formatted_address;
 
     const coordinates = {
+      formattedAddress,
       latitude: location.lat,
       longitude: location.lng
     };
