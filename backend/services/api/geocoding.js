@@ -7,7 +7,7 @@ require('dotenv').config();
  * @returns {Promise<Object>} - Resposta da API do Google Maps
  */
 async function geocoding(address) {
-    const baseUrl = 'maps.googleapis.com';
+    const baseUrl = 'https://maps.googleapis.com';
     const path = '/maps/api/geocode/json';
     const apiKey = process.env.GCLOUD_API_KEY;
     

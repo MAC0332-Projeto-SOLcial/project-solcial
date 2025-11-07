@@ -1,53 +1,35 @@
-const https = require('https');
+const axios = require('axios');
 
 /**
- * Faz uma requisição HTTP GET com query params
- * @param {string} baseUrl - URL base (ex: 'maps.googleapis.com')
+ * Faz uma requisição HTTP GET com query params usando axios
+ * @param {string} baseUrl - URL base (ex: 'https://maps.googleapis.com')
  * @param {string} path - Caminho da API (ex: '/maps/api/geocode/json')
  * @param {Object} queryParams - Objeto com os parâmetros de query
  * @returns {Promise<Object>} - Resposta da API parseada como JSON
  */
-function httpGet(baseUrl, path, queryParams = {}) {
-  return new Promise((resolve, reject) => {
-    // Constrói a query string a partir do objeto de parâmetros
-    const queryString = Object.keys(queryParams)
-      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`)
-      .join('&');
-    
+async function httpGet(baseUrl, path, queryParams = {}) {
+  try {
     // Monta a URL completa
-    const url = `${path}?${queryString}`;
+    const url = `${baseUrl}${path}`;
     
-    const options = {
-      hostname: baseUrl,
-      path: url,
-      method: 'GET'
-    };
-
-    const req = https.get(options, (res) => {
-      let data = '';
-
-      // Acumula os dados recebidos
-      res.on('data', (chunk) => {
-        data += chunk;
-      });
-
-      // Quando termina de receber os dados
-      res.on('end', () => {
-        try {
-          const jsonData = JSON.parse(data);
-          resolve(jsonData);
-        } catch (error) {
-          reject(new Error(`Erro ao parsear resposta: ${error.message}`));
-        }
-      });
+    // Faz a requisição GET com axios
+    const response = await axios.get(url, {
+      params: queryParams
     });
-
-    req.on('error', (error) => {
-      reject(new Error(`Erro na requisição: ${error.message}`));
-    });
-
-    req.end();
-  });
+    
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      // A requisição foi feita e o servidor respondeu com um status de erro
+      throw new Error(`Erro na requisição: ${error.response.status} - ${error.response.statusText}`);
+    } else if (error.request) {
+      // A requisição foi feita mas não houve resposta
+      throw new Error(`Erro na requisição: Sem resposta do servidor`);
+    } else {
+      // Algo aconteceu na configuração da requisição
+      throw new Error(`Erro na requisição: ${error.message}`);
+    }
+  }
 }
 
 module.exports = httpGet;
