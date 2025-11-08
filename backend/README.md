@@ -303,6 +303,7 @@ ISC
 
 ## 👥 Autores
 
+Marcelo Sabaris Carballo Pinto 
 Projeto SOLCial - Integração com Google Solar API
 
 ## 🙏 Agradecimentos

@@ -47,7 +47,7 @@ async function testHealthCheck() {
   console.log('='.repeat(60));
   
   try {
-    const response = await axios.get(`${BASE_URL}/health`);
+    const response = await axios.get(`${BASE_URL}/  `);
     log.success('Health check OK');
     console.log(JSON.stringify(response.data, null, 2));
     return true;
