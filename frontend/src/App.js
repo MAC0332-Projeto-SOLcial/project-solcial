@@ -13,7 +13,7 @@ function App() {
   const handleDataSubmit = (data) => {
     setUserData(data);
     setCurrentState("loading");
-    // Aqui você pode fazer a chamada à API
+
   };
 
   const handleComoFunciona = () => {
