@@ -3,11 +3,13 @@ const cors = require('cors');
 require('dotenv').config();
 
 const solarApiService = require('./services/solarApiService');
+// Import routes
+const rootRoutes = require('./routes/root');
+const coordinates = require('./routes/coordinates');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
@@ -323,4 +325,9 @@ app.listen(PORT, () => {
   console.log(`   - GET/POST http://localhost:${PORT}/api/solar/data-layers`);
   console.log(`   - GET/POST http://localhost:${PORT}/api/solar/analysis`);
   console.log(`\n📝 Environment: ${process.env.NODE_ENV || 'development'}`);
-});
+app.use('/', rootRoutes);
+app.use('/coordinates', coordinates);
+
+app.listen(PORT, () => {
+  console.log(`🚀 SOLCial API Server running on port ${PORT}`);
+})});
