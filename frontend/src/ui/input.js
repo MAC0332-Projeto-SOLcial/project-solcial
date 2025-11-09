@@ -28,4 +28,3 @@ const Input = React.forwardRef(({ className = '', type = 'text', label, labelCla
 Input.displayName = 'Input';
 
 export { Input };
-

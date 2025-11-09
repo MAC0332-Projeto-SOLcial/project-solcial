@@ -1,4 +1,4 @@
-# SOLCial - Projeto de Engenharia de Software
+# Projeto SOLCial - MAC0332 Engenharia de Software
 
 ## Descrição do Projeto
 
@@ -12,7 +12,7 @@ O SOLCial é uma aplicação web que visa tornar a energia solar mais acessível
 
 - **Frontend**: React + Tailwind CSS
 - **Backend**: Node.js + Express
-- **API**: Google Solar API
+- **API**: Google Solar API e Google GeoCoding API
 
 ## Estrutura do Projeto
 
@@ -20,6 +20,7 @@ O SOLCial é uma aplicação web que visa tornar a energia solar mais acessível
 project-solcial/
 ├── frontend/          # Aplicação React
 ├── backend/           # Servidor Node.js
+├─── DockerImages      # Arquivo de configuraçao do Docker
 ├── .env              # Variáveis de ambiente globais
 ├── .gitignore        # Arquivos ignorados pelo Git
 └── README.md         # Este arquivo
@@ -30,7 +31,7 @@ project-solcial/
 ### Pré-requisitos
 - Node.js (versão 18 ou superior)
 - npm ou yarn
-
+- Docker Desktop 
 ### Instalação das Dependências
 
 #### Backend
@@ -46,6 +47,14 @@ npm install
 ```
 
 ### Executando o Projeto
+#### docker
+```bash
+cd backend
+cd DockerImages 
+docker-compose up -d
+
+```
+O servidor estará rodando em `http://localhost:8081`  usuario:user senha:solcial
 
 #### Backend
 ```bash
