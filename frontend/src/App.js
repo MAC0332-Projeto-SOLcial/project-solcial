@@ -1,22 +1,82 @@
+import { useState } from 'react';
+import Homepage from './components/Home';
+import SolarForm from './components/SolarForm';
+
 function App() {
+  const [currentState, setCurrentState] = useState("homepage");
+  const [userData, setUserData] = useState(null);
+
+  const handleGetStarted = () => {
+    setCurrentState("input");
+  };
+
+  const handleDataSubmit = (data) => {
+    setUserData(data);
+    setCurrentState("loading");
+ 
+  };
+
+  const handleComoFunciona = () => {
+    setCurrentState("como-funciona");
+  };
+
+  const handleSobreNos = () => {
+    setCurrentState("sobre-nos");
+  };
+
+  const handleBack = () => {
+    if (currentState === "input") {
+      setCurrentState("homepage");
+    } else if (currentState === "results") {
+      setCurrentState("input");
+    } else if (currentState === "como-funciona" || currentState === "sobre-nos") {
+      setCurrentState("homepage");
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-solar-50 to-solar-100 flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-6xl font-bold text-solar-800 mb-4">
-          Hello World
-        </h1>
-        <p className="text-xl text-solar-600 mb-8">
-          SOLCial - Projeto de Engenharia de Software
-        </p>
-        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md mx-auto">
-          <h2 className="text-2xl font-semibold text-solar-700 mb-4">
-            🌞 Energia Solar para São Paulo
-          </h2>
-          <p className="text-gray-600">
-            Descubra o potencial solar do seu endereço e economize na conta de luz!
-          </p>
+    <div className="min-h-screen">
+      {currentState === "homepage" && (
+        <Homepage 
+          onGetStarted={handleGetStarted}
+          onComoFunciona={handleComoFunciona}
+          onSobreNos={handleSobreNos}
+        />
+      )}
+
+      {currentState === "input" && (
+        <SolarForm
+          onSubmit={handleDataSubmit}
+          onBack={handleBack}
+        />
+      )}
+
+      {currentState === "loading" && (
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-yellow-50">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+            <p className="text-lg text-gray-600">Calculando seu potencial solar...</p>
+          </div>
         </div>
-      </div>
+      )}
+
+      {currentState === "results" && userData && (
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-yellow-50">
+         
+        </div>
+      )}
+
+      {currentState === "como-funciona" && (
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-yellow-50">
+          
+        </div>
+      )}
+
+      {currentState === "sobre-nos" && (
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-yellow-50">
+          
+        </div>
+      )}
     </div>
   );
 }
