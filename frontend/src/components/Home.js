@@ -114,3 +114,4 @@ const Homepage = ({ onGetStarted, onComoFunciona, onSobreNos }) => {
 };
 
 export default Homepage;
+
