@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { MapPin, Zap, ArrowLeft } from "lucide-react";
 
@@ -70,16 +69,14 @@ const SolarForm = ({ onSubmit, onBack }) => {
                       <p className="text-sm text-gray-600">São Paulo, SP</p>
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="address">Endereço completo</Label>
-                    <Input
-                      id="address"
-                      placeholder="Ex: Rua das Flores, 123, Vila Mariana"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      className="text-base"
-                    />
-                  </div>
+                  <Input
+                    id="address"
+                    label="Endereço completo"
+                    placeholder="Ex: Rua das Flores, 123, Vila Mariana"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    className="text-base"
+                  />
                   <Button 
                     onClick={handleNext}
                     disabled={!address.trim()}
@@ -97,21 +94,19 @@ const SolarForm = ({ onSubmit, onBack }) => {
                       <p className="text-sm text-gray-600">Valor médio mensal</p>
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="monthlyBill">Valor da conta mensal (R$)</Label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">R$</span>
-                      <Input
-                        id="monthlyBill"
-                        type="number"
-                        placeholder="350,00"
-                        value={monthlyBill}
-                        onChange={(e) => setMonthlyBill(e.target.value)}
-                        className="pl-10 text-base"
-                        min="0"
-                        step="0.01"
-                      />
-                    </div>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">R$</span>
+                    <Input
+                      id="monthlyBill"
+                      label="Valor da conta mensal (R$)"
+                      type="number"
+                      placeholder="350,00"
+                      value={monthlyBill}
+                      onChange={(e) => setMonthlyBill(e.target.value)}
+                      className="pl-10 text-base"
+                      min="0"
+                      step="0.01"
+                    />
                   </div>
                   <Button 
                     onClick={handleSubmit}
@@ -160,15 +155,13 @@ const SolarForm = ({ onSubmit, onBack }) => {
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="address-desktop">Endereço completo</Label>
-                      <Input
-                        id="address-desktop"
-                        placeholder="Ex: Rua das Flores, 123, Vila Mariana"
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                      />
-                    </div>
+                    <Input
+                      id="address-desktop"
+                      label="Endereço completo"
+                      placeholder="Ex: Rua das Flores, 123, Vila Mariana"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                    />
                   </CardContent>
                 </Card>
 
@@ -186,21 +179,19 @@ const SolarForm = ({ onSubmit, onBack }) => {
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="monthlyBill-desktop">Valor da conta mensal (R$)</Label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">R$</span>
-                        <Input
-                          id="monthlyBill-desktop"
-                          type="number"
-                          placeholder="350,00"
-                          value={monthlyBill}
-                          onChange={(e) => setMonthlyBill(e.target.value)}
-                          className="pl-10"
-                          min="0"
-                          step="0.01"
-                        />
-                      </div>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">R$</span>
+                      <Input
+                        id="monthlyBill-desktop"
+                        label="Valor da conta mensal (R$)"
+                        type="number"
+                        placeholder="350,00"
+                        value={monthlyBill}
+                        onChange={(e) => setMonthlyBill(e.target.value)}
+                        className="pl-10"
+                        min="0"
+                        step="0.01"
+                      />
                     </div>
                   </CardContent>
                 </Card>
