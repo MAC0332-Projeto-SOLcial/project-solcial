@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Homepage from './components/Home';
 import SolarForm from './components/SolarForm';
+import SobreNos from './components/SobreNos';
 
 function App() {
   const [currentState, setCurrentState] = useState("homepage");
@@ -73,9 +74,7 @@ function App() {
       )}
 
       {currentState === "sobre-nos" && (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-yellow-50">
-          
-        </div>
+        <SobreNos onBack={handleBack} onGetStarted={handleGetStarted} />
       )}
     </div>
   );
