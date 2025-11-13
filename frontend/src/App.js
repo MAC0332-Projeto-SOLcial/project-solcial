@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Homepage from './components/Home';
 import SolarForm from './components/SolarForm';
 import SobreNos from './components/SobreNos';
+import ComoFunciona from './components/ComoFunciona';
 
 function App() {
   const [currentState, setCurrentState] = useState("homepage");
@@ -68,9 +69,7 @@ function App() {
       )}
 
       {currentState === "como-funciona" && (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-yellow-50">
-          
-        </div>
+        <ComoFunciona onBack={handleBack} onGetStarted={handleGetStarted} />
       )}
 
       {currentState === "sobre-nos" && (
