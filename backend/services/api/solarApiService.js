@@ -49,135 +49,9 @@ class SolarApiService {
       };
 
       console.log(`🌞 Buscando insights solares para: lat=${latitude}, lng=${longitude}`);
-      
       const response = await axios.get(url, { params });
-      
-      return {
-        success: true,
-        data: response.data,
-        requestInfo: {
-          latitude,
-          longitude,
-          requiredQuality,
-          timestamp: new Date().toISOString()
-        }
-      };
 
-    } catch (error) {
-      console.error('❌ Erro ao buscar insights solares:', error.message);
-      
-      // Tratamento de erros específicos da API
-      if (error.response) {
-        return {
-          success: false,
-          error: {
-            message: error.response.data?.error?.message || 'Erro na API Solar',
-            status: error.response.status,
-            code: error.response.data?.error?.code,
-            details: error.response.data?.error?.details
-          }
-        };
-      }
-
-      return {
-        success: false,
-        error: {
-          message: error.message,
-          type: 'internal_error'
-        }
-      };
-    }
-  }
-
-  /**
-   * Busca dados de camadas de dados solares (Data Layers)
-   * @param {Object} params - Parâmetros da requisição
-   * @param {number} params.latitude - Latitude do local
-   * @param {number} params.longitude - Longitude do local
-   * @param {number} params.radiusMeters - Raio em metros
-   * @param {string} params.requiredQuality - Qualidade requerida
-   * @returns {Promise<Object>} Dados de camadas solares
-   */
-  async getDataLayers({ latitude, longitude, radiusMeters = 50, requiredQuality = 'HIGH' }) {
-    try {
-      if (!latitude || !longitude) {
-        throw new Error('Latitude e longitude são obrigatórios');
-      }
-
-      if (!this.apiKey) {
-        throw new Error('Google Solar API Key não configurada');
-      }
-
-      const url = `${this.baseUrl}/dataLayers:get`;
-      
-      const params = {
-        'location.latitude': latitude,
-        'location.longitude': longitude,
-        radiusMeters,
-        requiredQuality: requiredQuality.toUpperCase(),
-        key: this.apiKey
-      };
-
-      console.log(`🌞 Buscando camadas de dados solares para: lat=${latitude}, lng=${longitude}`);
-      
-      const response = await axios.get(url, { params });
-      
-      return {
-        success: true,
-        data: response.data,
-        requestInfo: {
-          latitude,
-          longitude,
-          radiusMeters,
-          requiredQuality,
-          timestamp: new Date().toISOString()
-        }
-      };
-
-    } catch (error) {
-      console.error('❌ Erro ao buscar camadas de dados:', error.message);
-      
-      if (error.response) {
-        return {
-          success: false,
-          error: {
-            message: error.response.data?.error?.message || 'Erro na API Solar',
-            status: error.response.status,
-            code: error.response.data?.error?.code
-          }
-        };
-      }
-
-      return {
-        success: false,
-        error: {
-          message: error.message,
-          type: 'internal_error'
-        }
-      };
-    }
-  }
-
-  /**
-   * Analisa o potencial solar de um local
-   * Retorna dados processados e legíveis
-   * @param {number} latitude - Latitude do local
-   * @param {number} longitude - Longitude do local
-   * @returns {Promise<Object>} Análise do potencial solar
-   */
-  async analyzeSolarPotential(latitude, longitude) {
-    try {
-      const result = await this.findClosestBuildingInsights({
-        latitude,
-        longitude,
-        requiredQuality: 'HIGH'
-      });
-
-      if (!result.success) {
-        return result;
-      }
-
-      const insights = result.data;
+      const insights = response.data;
       
       // Processa e estrutura os dados de forma mais amigável
       const analysis = {
@@ -219,6 +93,98 @@ class SolarApiService {
       };
     }
   }
+
+    
+
+  /**
+   * Busca dados de camadas de dados solares (Data Layers)
+   * @param {Object} params - Parâmetros da requisição
+   * @param {number} params.latitude - Latitude do local
+   * @param {number} params.longitude - Longitude do local
+   * @param {number} params.radiusMeters - Raio em metros
+   * @param {string} params.requiredQuality - Qualidade requerida
+   * @returns {Promise<Object>} Dados de camadas solares
+   */
+  async getDataLayers({ latitude, longitude, radiusMeters = 50, requiredQuality = 'HIGH' }) {
+    try {
+      if (!latitude || !longitude) {
+        throw new Error('Latitude e longitude são obrigatórios');
+      }
+
+      if (!this.apiKey) {
+        throw new Error('Google Solar API Key não configurada');
+      }
+
+      const url = `${this.baseUrl}/dataLayers:get`;
+      
+      const params = {
+        'location.latitude': latitude,
+        'location.longitude': longitude,
+        radiusMeters,
+        requiredQuality: requiredQuality.toUpperCase(),
+        key: this.apiKey
+      };
+
+      console.log(`🌞 Buscando camadas de dados solares para: lat=${latitude}, lng=${longitude}`);
+      
+      const response = await axios.get(url, { params });
+
+      const insights = response.data;
+      
+      // Processa e estrutura os dados de forma mais amigável
+      const analysis = {
+        success: true,
+        location: {
+          latitude,
+          longitude,
+          address: insights.name || 'Endereço não disponível'
+        },
+        solarPotential: {
+          maxArrayPanelsCount: insights.solarPotential?.maxArrayPanelsCount || 0,
+          maxArrayAreaMeters2: insights.solarPotential?.maxArrayAreaMeters2 || 0,
+          maxSunshineHoursPerYear: insights.solarPotential?.maxSunshineHoursPerYear || 0,
+          carbonOffsetFactorKgPerMwh: insights.solarPotential?.carbonOffsetFactorKgPerMwh || 0
+        },
+        financialAnalyses: insights.solarPotential?.financialAnalyses || [],
+        roofSegmentStats: insights.solarPotential?.roofSegmentStats || [],
+        solarPanelConfigs: insights.solarPotential?.solarPanelConfigs || [],
+        buildingStats: {
+          areaMeters2: insights.boundingBox?.sw && insights.boundingBox?.ne ? 
+            this.calculateArea(insights.boundingBox) : 0,
+          center: insights.center,
+          imageryDate: insights.imageryDate,
+          imageryQuality: insights.imageryQuality
+        },
+        timestamp: new Date().toISOString()
+      };
+
+      return analysis;
+
+    } catch (error) {
+      console.error('❌ Erro ao buscar camadas de dados:', error.message);
+      
+      if (error.response) {
+        return {
+          success: false,
+          error: {
+            message: error.response.data?.error?.message || 'Erro na API Solar',
+            status: error.response.status,
+            code: error.response.data?.error?.code
+          }
+        };
+      }
+
+      return {
+        success: false,
+        error: {
+          message: error.message,
+          type: 'internal_error'
+        }
+      };
+    }
+  }
+
+     
 
   /**
    * Calcula a área aproximada de um bounding box

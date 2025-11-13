@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { geocoding } = require('../services/api/geocoding');
+const app = express();
 
 const validatePayload = (payload) => {
   if (!payload?.address) {

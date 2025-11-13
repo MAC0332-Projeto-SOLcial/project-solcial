@@ -80,6 +80,7 @@ temp/
 *.swp
 *.swo
 *~
+.vscode/
 
 # OS generated files
 .DS_Store

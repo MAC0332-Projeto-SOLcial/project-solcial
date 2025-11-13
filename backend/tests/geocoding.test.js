@@ -1,5 +1,5 @@
-const { geocoding } = require('../geocoding');
-const httpGet = require('../http-get');
+const { geocoding } = require('../services/api/geocoding');
+const httpGet = require('../services/api/http-get');
 
 // Mock do httpGet
 jest.mock('../http-get');
