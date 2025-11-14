@@ -42,9 +42,6 @@ app.use((error, req, res, next) => {
   });
 });
 
-
-
-
 app.listen(PORT, () => {
   console.log(`🚀 SOLCial API Server running on port ${PORT}`);
   console.log(`🌞 Solar API endpoints:`);
