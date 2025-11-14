@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { geocoding } = require('../services/api/geocoding');
-const app = express();
+const geocoding = require('../services/api/geocoding');
 
 const validatePayload = (payload) => {
   if (!payload?.address) {
@@ -20,7 +19,7 @@ router.get('/', async (req, res) => {
     validatePayload(req.body);
 
     const { address } = req.body;
-    const geocodingResponse = await geocoding(address);
+    const geocodingResponse = await geocoding.getCoordinates(address);
     const location = geocodingResponse.results[0].geometry.location;
     const formattedAddress = geocodingResponse.results[0].formatted_address;
 
