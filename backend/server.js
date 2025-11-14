@@ -9,7 +9,7 @@ const coordinates = require('./routes/coordinates');
 const apisolar = require('./routes/apisolar');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -58,7 +58,7 @@ app.use((error, req, res, next) => {
     success: false,
     error: {
       message: 'Erro interno do servidor',
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+      details: error.message
     }
   });
 });
@@ -73,9 +73,6 @@ app.listen(PORT, () => {
   console.log(`   - GET/POST http://localhost:${PORT}/api/solar/building-insights`);
   console.log(`   - GET/POST http://localhost:${PORT}/api/solar/data-layers`);
   
-  console.log(`\n📝 Environment: ${process.env.NODE_ENV || 'development'}`);
-
-
 app.listen(PORT, () => {
   console.log(`🚀 SOLCial API Server running on port ${PORT}`);
 })});

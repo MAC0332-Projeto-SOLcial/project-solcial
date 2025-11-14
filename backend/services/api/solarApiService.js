@@ -6,11 +6,11 @@ const axios = require('axios');
  */
 class SolarApiService {
   constructor() {
-    this.apiKey = process.env.GOOGLE_SOLAR_API_KEY;
+    this.apiKey = process.env.GCLOUD_API_KEY;
     this.baseUrl = process.env.GOOGLE_SOLAR_API_URL || 'https://solar.googleapis.com/v1';
     
     if (!this.apiKey) {
-      console.warn('⚠️ GOOGLE_SOLAR_API_KEY não configurada no .env');
+      console.warn('⚠️ GCLOUD_API_KEY não configurada no .env');
     }
   }
 
