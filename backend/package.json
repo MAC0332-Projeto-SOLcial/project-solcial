@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "SOLCial Backend API - Integração com Google Solar API",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -9,7 +9,11 @@
     "test": "jest",
     "test:watch": "jest --watch"
   },
-  "keywords": [],
+  "keywords": [
+    "solar",
+    "google-solar-api",
+    "renewable-energy"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
@@ -17,7 +21,9 @@
     "axios": "^1.12.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "raw-body": "^3.0.1",
+    "safe-buffer": "^5.2.1"
   },
   "devDependencies": {
     "jest": "^29.7.0"
