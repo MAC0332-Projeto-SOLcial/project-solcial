@@ -1,6 +1,6 @@
-import React from 'react';
+import { forwardRef } from 'react';
 
-const Card = React.forwardRef(({ 
+const Card = forwardRef(({ 
   className = '', 
   title,
   description,

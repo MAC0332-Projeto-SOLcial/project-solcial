@@ -1,6 +1,6 @@
-import React from 'react';
+import { forwardRef } from 'react';
 
-const Button = React.forwardRef(({ className = '', variant = 'default', size = 'default', ...props }, ref) => {
+const Button = forwardRef(({ className = '', variant = 'default', size = 'default', ...props }, ref) => {
   const baseClasses = 'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50';
   
   const variants = {

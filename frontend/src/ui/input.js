@@ -1,7 +1,7 @@
-import React from 'react';
+import { forwardRef } from 'react';
 import { Label } from './label';
 
-const Input = React.forwardRef(({ className = '', type = 'text', label, labelClassName = '', error, ...props }, ref) => {
+const Input = forwardRef(({ className = '', type = 'text', label, labelClassName = '', error, ...props }, ref) => {
   
   const errorClasses = error ? 'border-red-500 focus-visible:ring-red-500' : '';
   
