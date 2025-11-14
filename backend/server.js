@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
-
 // Import routes
 const rootRoutes = require('./routes/root');
 const coordinates = require('./routes/coordinates');
@@ -15,30 +14,10 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.get('/', (req, res) => {
-  res.json({ 
-    message: 'SOLCial API Server is running!',
-    version: '1.0.0',
-    endpoints: {
-      health: '/health',
-      solarBuildingInsights: '/api/solar/building-insights',
-      solarDataLayers: '/api/solar/data-layers',
-      
-    }
-  });
-});
-
-app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'OK',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime()
-  });
-});
-
 app.use('/', rootRoutes);
 app.use('/coordinates', coordinates);
-app.use('/', apisolar);
+app.use('/apisolar', apisolar);
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({
@@ -53,7 +32,7 @@ app.use((req, res) => {
 
 // Error handler
 app.use((error, req, res, next) => {
-  console.error('❌ Erro não tratado:', error);
+  console.error('Erro não tratado:', error);
   res.status(500).json({
     success: false,
     error: {
@@ -68,11 +47,7 @@ app.use((error, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`🚀 SOLCial API Server running on port ${PORT}`);
-  console.log(`📡 Health check: http://localhost:${PORT}/health`);
   console.log(`🌞 Solar API endpoints:`);
-  console.log(`   - GET/POST http://localhost:${PORT}/api/solar/building-insights`);
-  console.log(`   - GET/POST http://localhost:${PORT}/api/solar/data-layers`);
-  
-app.listen(PORT, () => {
-  console.log(`🚀 SOLCial API Server running on port ${PORT}`);
-})});
+  console.log(`   - GET http://localhost:${PORT}/apisolar`);
+  console.log(`   - GET http://localhost:${PORT}/coordinates`);
+});
