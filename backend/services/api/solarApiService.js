@@ -10,10 +10,10 @@ class SolarApiService {
     this.baseUrl = process.env.GOOGLE_SOLAR_API_URL;
     
     if (!this.apiKey) {
-      console.warn('GCLOUD_API_KEY não configurada');
+      throw new Error('GCLOUD_API_KEY não configurada');
     }
     if (!this.baseUrl) {
-      console.warn('GOOGLE_SOLAR_API_URL não configurada');
+      throw new Error('GOOGLE_SOLAR_API_URL não configurada');
     }
   }
 
@@ -28,10 +28,6 @@ class SolarApiService {
       // Validação dos parâmetros
       if (!latitude || !longitude) {
         throw new Error('Latitude e longitude são obrigatórios');
-      }
-
-      if (!this.apiKey) {
-        throw new Error('Google Solar API Key não configurada');
       }
 
       const path = '/buildingInsights:findClosest';
