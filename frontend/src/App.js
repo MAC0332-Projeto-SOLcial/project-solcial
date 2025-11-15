@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Homepage from './components/Home';
 import SolarForm from './components/SolarForm';
+import SolarImpactDashboard from "./components/SolarImpactDashboard";
 
 function App() {
   const [currentState, setCurrentState] = useState("homepage");
@@ -12,7 +13,7 @@ function App() {
 
   const handleDataSubmit = (data) => {
     setUserData(data);
-    setCurrentState("loading");
+    setCurrentState("results");
 
   };
 
@@ -62,7 +63,7 @@ function App() {
 
       {currentState === "results" && userData && (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-yellow-50">
-         
+         <SolarImpactDashboard userData={userData} onBack={handleBack} />
         </div>
       )}
 
