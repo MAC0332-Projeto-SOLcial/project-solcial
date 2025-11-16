@@ -1,4 +1,4 @@
-const axios = require('axios');
+const httpGet = require('./http-get');
 
 /**
  * Serviço para integração com Google Solar API
@@ -6,185 +6,65 @@ const axios = require('axios');
  */
 class SolarApiService {
   constructor() {
-    this.apiKey = process.env.GOOGLE_SOLAR_API_KEY;
-    this.baseUrl = process.env.GOOGLE_SOLAR_API_URL || 'https://solar.googleapis.com/v1';
+    this.apiKey = process.env.GCLOUD_API_KEY;
+    this.baseUrl = process.env.GOOGLE_SOLAR_API_URL;
     
     if (!this.apiKey) {
-      console.warn('⚠️ GOOGLE_SOLAR_API_KEY não configurada no .env');
+      throw new Error('GCLOUD_API_KEY não configurada');
+    }
+    if (!this.baseUrl) {
+      throw new Error('GOOGLE_SOLAR_API_URL não configurada');
     }
   }
 
   /**
    * Busca informações de insights solares para um local específico
-   * @param {Object} params - Parâmetros da requisição
-   * @param {number} params.latitude - Latitude do local
-   * @param {number} params.longitude - Longitude do local
-   * @param {string} params.requiredQuality - Qualidade requerida (LOW, MEDIUM, HIGH)
+   * @param {number} latitude - Latitude do local
+   * @param {number} longitude - Longitude do local
    * @returns {Promise<Object>} Dados de insights solares
    */
-  async findClosestBuildingInsights({ latitude, longitude, requiredQuality = 'HIGH' }) {
+  async getSolarPotential(latitude, longitude) {
     try {
       // Validação dos parâmetros
       if (!latitude || !longitude) {
         throw new Error('Latitude e longitude são obrigatórios');
       }
 
-      if (!this.apiKey) {
-        throw new Error('Google Solar API Key não configurada');
-      }
-
-      // Validação da qualidade
-      const validQualities = ['LOW', 'MEDIUM', 'HIGH'];
-      if (!validQualities.includes(requiredQuality.toUpperCase())) {
-        throw new Error(`Qualidade inválida. Use: ${validQualities.join(', ')}`);
-      }
-
-      const url = `${this.baseUrl}/buildingInsights:findClosest`;
+      const path = '/buildingInsights:findClosest';
       
       const params = {
         'location.latitude': latitude,
         'location.longitude': longitude,
-        requiredQuality: requiredQuality.toUpperCase(),
+        requiredQuality: 'HIGH',
         key: this.apiKey
       };
 
-      console.log(`🌞 Buscando insights solares para: lat=${latitude}, lng=${longitude}`);
-      const response = await axios.get(url, { params });
+      const response = await httpGet(this.baseUrl, path, params);
 
-      const insights = response.data;
-      
+      const solarPotential = response.solarPotential;
+
+      if (!solarPotential) {
+        throw new Error('Não foi possível obter os dados do potencial solar');
+      }
+
       // Processa e estrutura os dados de forma mais amigável
-      const analysis = {
-        success: true,
-        location: {
-          latitude,
-          longitude,
-          address: insights.name || 'Endereço não disponível'
-        },
-        solarPotential: {
-          maxArrayPanelsCount: insights.solarPotential?.maxArrayPanelsCount || 0,
-          maxArrayAreaMeters2: insights.solarPotential?.maxArrayAreaMeters2 || 0,
-          maxSunshineHoursPerYear: insights.solarPotential?.maxSunshineHoursPerYear || 0,
-          carbonOffsetFactorKgPerMwh: insights.solarPotential?.carbonOffsetFactorKgPerMwh || 0
-        },
-        financialAnalyses: insights.solarPotential?.financialAnalyses || [],
-        roofSegmentStats: insights.solarPotential?.roofSegmentStats || [],
-        solarPanelConfigs: insights.solarPotential?.solarPanelConfigs || [],
-        buildingStats: {
-          areaMeters2: insights.boundingBox?.sw && insights.boundingBox?.ne ? 
-            this.calculateArea(insights.boundingBox) : 0,
-          center: insights.center,
-          imageryDate: insights.imageryDate,
-          imageryQuality: insights.imageryQuality
-        },
-        timestamp: new Date().toISOString()
-      };
-
-      return analysis;
-
-    } catch (error) {
-      console.error('❌ Erro ao analisar potencial solar:', error.message);
       return {
-        success: false,
-        error: {
-          message: error.message,
-          type: 'analysis_error'
-        }
-      };
-    }
-  }
-
-    
-
-  /**
-   * Busca dados de camadas de dados solares (Data Layers)
-   * @param {Object} params - Parâmetros da requisição
-   * @param {number} params.latitude - Latitude do local
-   * @param {number} params.longitude - Longitude do local
-   * @param {number} params.radiusMeters - Raio em metros
-   * @param {string} params.requiredQuality - Qualidade requerida
-   * @returns {Promise<Object>} Dados de camadas solares
-   */
-  async getDataLayers({ latitude, longitude, radiusMeters = 50, requiredQuality = 'HIGH' }) {
-    try {
-      if (!latitude || !longitude) {
-        throw new Error('Latitude e longitude são obrigatórios');
-      }
-
-      if (!this.apiKey) {
-        throw new Error('Google Solar API Key não configurada');
-      }
-
-      const url = `${this.baseUrl}/dataLayers:get`;
-      
-      const params = {
-        'location.latitude': latitude,
-        'location.longitude': longitude,
-        radiusMeters,
-        requiredQuality: requiredQuality.toUpperCase(),
-        key: this.apiKey
-      };
-
-      console.log(`🌞 Buscando camadas de dados solares para: lat=${latitude}, lng=${longitude}`);
-      
-      const response = await axios.get(url, { params });
-
-      const insights = response.data;
-      
-      // Processa e estrutura os dados de forma mais amigável
-      const analysis = {
         success: true,
-        location: {
-          latitude,
-          longitude,
-          address: insights.name || 'Endereço não disponível'
-        },
-        solarPotential: {
-          maxArrayPanelsCount: insights.solarPotential?.maxArrayPanelsCount || 0,
-          maxArrayAreaMeters2: insights.solarPotential?.maxArrayAreaMeters2 || 0,
-          maxSunshineHoursPerYear: insights.solarPotential?.maxSunshineHoursPerYear || 0,
-          carbonOffsetFactorKgPerMwh: insights.solarPotential?.carbonOffsetFactorKgPerMwh || 0
-        },
-        financialAnalyses: insights.solarPotential?.financialAnalyses || [],
-        roofSegmentStats: insights.solarPotential?.roofSegmentStats || [],
-        solarPanelConfigs: insights.solarPotential?.solarPanelConfigs || [],
-        buildingStats: {
-          areaMeters2: insights.boundingBox?.sw && insights.boundingBox?.ne ? 
-            this.calculateArea(insights.boundingBox) : 0,
-          center: insights.center,
-          imageryDate: insights.imageryDate,
-          imageryQuality: insights.imageryQuality
-        },
-        timestamp: new Date().toISOString()
-      };
-
-      return analysis;
-
-    } catch (error) {
-      console.error('❌ Erro ao buscar camadas de dados:', error.message);
-      
-      if (error.response) {
-        return {
-          success: false,
-          error: {
-            message: error.response.data?.error?.message || 'Erro na API Solar',
-            status: error.response.status,
-            code: error.response.data?.error?.code
-          }
-        };
+        maxArrayPanelsCount: solarPotential.maxArrayPanelsCount || 0,
+        solarPanelConfigs: solarPotential.solarPanelConfigs || [],
+        maxSunshineHoursPerYear: solarPotential.maxSunshineHoursPerYear || 0,
+        carbonOffsetFactorKgPerMwh: solarPotential.carbonOffsetFactorKgPerMwh || 0,
       }
-
+    } catch (error) {
       return {
         success: false,
         error: {
           message: error.message,
           type: 'internal_error'
         }
-      };
+      }
     }
-  }
-
-     
+  }     
 
   /**
    * Calcula a área aproximada de um bounding box
