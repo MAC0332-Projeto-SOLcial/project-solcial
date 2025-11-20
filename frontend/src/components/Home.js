@@ -81,7 +81,6 @@ const Homepage = ({ onGetStarted, onComoFunciona, onSobreNos }) => {
             onClick={onGetStarted}
             variant="default"
             size="lg"
-            className="shadow-lg hover:shadow-xl transition-all duration-300 w-full md:w-auto text-lg"
           >
             Analisar Agora
           </Button>
