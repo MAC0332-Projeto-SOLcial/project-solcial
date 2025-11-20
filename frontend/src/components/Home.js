@@ -23,7 +23,6 @@ const Homepage = ({ onGetStarted, onComoFunciona, onSobreNos }) => {
           >
             Sobre Nós
           </button>
-          <a href="#" className="text-gray-600 hover:text-green-600 transition-colors">Contato</a>
         </div>
       </nav>
 
