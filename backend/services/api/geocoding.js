@@ -1,26 +1,39 @@
 const httpGet = require('./http-get');
 require('dotenv').config();
 
-/**
- * Exemplo: Geocoding do Google Maps
- * @param {string} address - Endereço para geocodificar
- * @returns {Promise<Object>} - Resposta da API do Google Maps
- */
-async function geocoding(address) {
-    const baseUrl = 'https://maps.googleapis.com';
-    const path = '/maps/api/geocode/json';
-    const apiKey = process.env.GCLOUD_API_KEY;
-    
-    if (!apiKey) {
-        throw new Error('GCLOUD_API_KEY não encontrada nas variáveis de ambiente');
+class Geocoding {
+    constructor() {
+        this.baseUrl = process.env.GOOGLE_GEOCODING_API_URL;
+        this.apiKey = process.env.GCLOUD_API_KEY;
+
+        if (!this.apiKey) {
+            throw new Error('GCLOUD_API_KEY não configurada');
+        }
+        if (!this.baseUrl) {
+            throw new Error('GOOGLE_GEOCODING_API_URL não configurada');
+        }
     }
-    
-    const queryParams = {
-        address: address,
-        key: apiKey
-    };
-    
-    return await httpGet(baseUrl, path, queryParams);
+
+    /**
+     * Busca as coordenadas geográficas de um endereço
+     * @param {string} address - Endereço para geocodificar
+     * @returns {Promise<Object>} - Resposta da API do Google Maps
+     */
+    async getCoordinates(address) {
+        // Validação dos parâmetros
+        if (!address) {
+            throw new Error('Endereço é obrigatório');
+        }
+
+        const path = '/maps/api/geocode/json';
+        
+        const params = {
+            address: address,
+            key: this.apiKey
+        };
+        
+        return await httpGet(this.baseUrl, path, params);
+    }
 }
 
-module.exports = { geocoding };
+module.exports = new Geocoding();

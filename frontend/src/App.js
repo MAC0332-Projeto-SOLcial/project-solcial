@@ -3,6 +3,7 @@ import Homepage from './components/Home';
 import SolarForm from './components/SolarForm';
 import SobreNos from './components/SobreNos';
 import ComoFunciona from './components/ComoFunciona';
+import { LoadingSpinner } from './ui/loadingspinner';
 
 function App() {
   const [currentState, setCurrentState] = useState("homepage");
@@ -56,7 +57,7 @@ function App() {
       {currentState === "loading" && (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-yellow-50">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+            <LoadingSpinner className="h-12 w-12 mx-auto mb-4" /> 
             <p className="text-lg text-gray-600">Calculando seu potencial solar...</p>
           </div>
         </div>
