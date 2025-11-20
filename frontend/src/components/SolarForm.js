@@ -374,14 +374,16 @@ const SolarForm = ({ onSubmit, onBack }) => {
       <Button 
         onClick={handleNext}
         disabled={!street.trim() || !number.trim() || zipCode.replace(/\D/g, '').length !== 8 || zipCodeStatus === 'loading' || numberError || zipCodeError}
-        className="w-full bg-green-600 hover:bg-green-700 text-white py-3 md:hidden"
+        variant="default"
+        className="w-full md:hidden"
       >
         Próximo
       </Button>
       <Button 
         onClick={handleNext}
         disabled={!street.trim() || !number.trim() || zipCode.replace(/\D/g, '').length !== 8 || zipCodeStatus === 'loading' || numberError || zipCodeError}
-        className="hidden md:block w-full bg-green-600 hover:bg-green-700 text-white py-3 mt-6"
+        variant="default"
+        className="hidden md:block w-full mt-6"
       >
         Próximo
       </Button>
@@ -453,7 +455,8 @@ const SolarForm = ({ onSubmit, onBack }) => {
       <Button 
         onClick={handleNext}
         disabled={!areAllBillsValid()}
-        className="w-full bg-green-600 hover:bg-green-700 text-white py-3"
+        variant="default"
+        className="w-full"
         >
         Próximo
       </Button>
@@ -525,7 +528,8 @@ const SolarForm = ({ onSubmit, onBack }) => {
       <Button 
         onClick={handleSubmit}
         disabled={!areAllKwhValid()}
-        className="w-full bg-green-600 hover:bg-green-700 text-white py-3"
+        variant="default"
+        className="w-full"
       >
         Calcular Potencial Solar
       </Button>

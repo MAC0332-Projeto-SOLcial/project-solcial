@@ -26,7 +26,6 @@ const Homepage = ({ onGetStarted, onComoFunciona, onSobreNos }) => {
         </div>
       </nav>
 
-      {/* Mobile Header */}
       <div className="md:hidden flex items-center justify-center pt-8 pb-4">
         <div className="flex items-center space-x-2">
           <Sun className="w-8 h-8 text-yellow-500" />
@@ -80,13 +79,14 @@ const Homepage = ({ onGetStarted, onComoFunciona, onSobreNos }) => {
 
           <Button 
             onClick={onGetStarted}
-            className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg text-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 w-full md:w-auto"
+            variant="default"
+            size="lg"
+            className="shadow-lg hover:shadow-xl transition-all duration-300 w-full md:w-auto text-lg"
           >
             Analisar Agora
           </Button>
         </div>
 
-        {/* Right Image */}
         <div className="flex-1 max-w-2xl">
           <div className="relative">
             <img
@@ -99,11 +99,13 @@ const Homepage = ({ onGetStarted, onComoFunciona, onSobreNos }) => {
         </div>
       </div>
 
-      {/* Bottom CTA for Mobile */}
+     
       <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-white shadow-lg border-t">
         <Button 
           onClick={onGetStarted}
-          className="bg-green-600 hover:bg-green-700 text-white w-full py-4 rounded-lg font-medium"
+          variant="default"
+          size="lg"
+          className="w-full"
         >
           Analisar Agora
         </Button>
