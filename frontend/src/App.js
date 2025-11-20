@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import Homepage from './components/Home';
 import SolarForm from './components/SolarForm';
+import SobreNos from './components/SobreNos';
+import ComoFunciona from './components/ComoFunciona';
 import { LoadingSpinner } from './ui/loadingspinner';
 
 function App() {
@@ -67,15 +69,11 @@ function App() {
       )}
 
       {currentState === "como-funciona" && (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-yellow-50">
-          
-        </div>
+        <ComoFunciona onBack={handleBack} onGetStarted={handleGetStarted} />
       )}
 
       {currentState === "sobre-nos" && (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-yellow-50">
-          
-        </div>
+        <SobreNos onBack={handleBack} onGetStarted={handleGetStarted} />
       )}
     </div>
   );
