@@ -2,43 +2,49 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
-const app = express();
-const PORT = process.env.PORT || 3001;
+// Import routes
+const rootRoutes = require('./routes/root');
+const coordinates = require('./routes/coordinates');
+const apisolar = require('./routes/apisolar');
 
-// Middleware
+const app = express();
+const PORT = process.env.PORT || 3000;
+
 app.use(cors());
 app.use(express.json());
 
 // Routes
-app.get('/', (req, res) => {
-  res.json({ 
-    message: 'SOLCial API Server is running!',
-    version: '1.0.0',
-    endpoints: {
-      health: '/health',
-      solar: '/api/solar'
+app.use('/', rootRoutes);
+app.use('/coordinates', coordinates);
+app.use('/apisolar', apisolar);
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    error: {
+      message: 'Endpoint não encontrado',
+      path: req.path,
+      method: req.method
     }
   });
 });
 
-app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'OK',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime()
-  });
-});
-
-// Solar API endpoint (placeholder)
-app.get('/api/solar', (req, res) => {
-  res.json({
-    message: 'Solar API endpoint - ready for Google Solar API integration',
-    status: 'development'
+// Error handler
+app.use((error, req, res, next) => {
+  console.error('Erro não tratado:', error);
+  res.status(500).json({
+    success: false,
+    error: {
+      message: 'Erro interno do servidor',
+      details: error.message
+    }
   });
 });
 
 app.listen(PORT, () => {
   console.log(`🚀 SOLCial API Server running on port ${PORT}`);
-  console.log(`📡 Health check: http://localhost:${PORT}/health`);
-  console.log(`🌞 Solar API: http://localhost:${PORT}/api/solar`);
+  console.log(`🌞 Solar API endpoints:`);
+  console.log(`   - GET http://localhost:${PORT}/apisolar`);
+  console.log(`   - GET http://localhost:${PORT}/coordinates`);
 });
