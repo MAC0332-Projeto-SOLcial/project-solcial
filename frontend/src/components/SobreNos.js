@@ -66,7 +66,7 @@ const SobreNos = ({ onBack, onGetStarted }) => {
         {/* Nossa Missão Section */}
         <div className="bg-green-50 px-6 lg:px-8 py-12 lg:py-16">
           <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6 text-center lg:text-left">
-            Nossa Missão é Democratizar o Sol para Todos
+            Nossa Missão é Democratizar informação sobre fontes de energia renováveis
           </h1>
           <p className="text-lg text-gray-700 leading-relaxed max-w-3xl">
             O SOLcial nasceu de um propósito claro: dar a cada morador e pequeno comerciante de São Paulo o poder de gerar sua própria energia limpa, economizar dinheiro e construir um futuro mais sustentável.
