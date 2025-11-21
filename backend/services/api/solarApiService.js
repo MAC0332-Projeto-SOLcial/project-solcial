@@ -64,7 +64,7 @@ class SolarApiService {
         }
       }
     }
-  }     
+  }
 
   /**
    * Calcula a área aproximada de um bounding box
