@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Card } from "../ui/card";
+import { StepIndicator } from "../ui/step-indicator";
 import { MapPin, Zap, ArrowLeft, DollarSign } from "lucide-react";
 import { LoadingSpinner } from '../ui/loadingspinner';
 
@@ -552,11 +553,7 @@ const SolarForm = ({ onSubmit, onBack }) => {
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </button>
-                <div className="flex justify-center space-x-2 mb-4">
-                  <div className={`w-3 h-3 rounded-full transition-colors ${step === 1 ? 'bg-green-600' : 'bg-gray-300'}`}></div>
-                  <div className={`w-3 h-3 rounded-full transition-colors ${step === 2 ? 'bg-green-600' : 'bg-gray-300'}`}></div>
-                  <div className={`w-3 h-3 rounded-full transition-colors ${step === 3 ? 'bg-green-600' : 'bg-gray-300'}`}></div>
-                </div>
+                <StepIndicator currentStep={step} totalSteps={3} className="mb-4" />
                 <h3 className="text-2xl text-gray-900">
                   {getStepTitle()}
                 </h3>

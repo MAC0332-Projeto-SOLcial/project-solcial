@@ -1,4 +1,6 @@
 import { Button } from "../ui/button";
+import { Logo } from "../ui/logo";
+import { FeatureCard } from "../ui/feature-card";
 import { Sun, Leaf, Zap } from "lucide-react";
 
 const Homepage = ({ onGetStarted, onComoFunciona, onSobreNos }) => {
@@ -6,10 +8,7 @@ const Homepage = ({ onGetStarted, onComoFunciona, onSobreNos }) => {
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-yellow-50">
       {/* Desktop Navigation */}
       <nav className="hidden md:flex items-center justify-between p-6 lg:px-8">
-        <div className="flex items-center space-x-2">
-          <Sun className="w-8 h-8 text-yellow-500" />
-          <span className="text-2xl font-bold text-green-700">SOLcial</span>
-        </div>
+        <Logo />
         <div className="flex space-x-8">
           <button 
             onClick={onComoFunciona}
@@ -27,10 +26,7 @@ const Homepage = ({ onGetStarted, onComoFunciona, onSobreNos }) => {
       </nav>
 
       <div className="md:hidden flex items-center justify-center pt-8 pb-4">
-        <div className="flex items-center space-x-2">
-          <Sun className="w-8 h-8 text-yellow-500" />
-          <span className="text-2xl font-bold text-green-700">SOLcial</span>
-        </div>
+        <Logo />
       </div>
 
       {/* Hero Section */}
@@ -48,33 +44,27 @@ const Homepage = ({ onGetStarted, onComoFunciona, onSobreNos }) => {
           
         
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 lg:mb-12">
-            <div className="flex flex-col items-center lg:items-start">
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-3">
-                <Zap className="w-6 h-6 text-green-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-1">Análise Rápida</h3>
-              <p className="text-sm text-gray-600 text-center lg:text-left">
-                Resultados em segundos com base no seu endereço
-              </p>
-            </div>
-            <div className="flex flex-col items-center lg:items-start">
-              <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-3">
-                <Sun className="w-6 h-6 text-yellow-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-1">Dados Precisos</h3>
-              <p className="text-sm text-gray-600 text-center lg:text-left">
-                Cálculos baseados na irradiação solar de São Paulo
-              </p>
-            </div>
-            <div className="flex flex-col items-center lg:items-start">
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-3">
-                <Leaf className="w-6 h-6 text-green-600" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-1">Impacto Real</h3>
-              <p className="text-sm text-gray-600 text-center lg:text-left">
-                Veja sua contribuição para um planeta mais verde
-              </p>
-            </div>
+            <FeatureCard
+              icon={Zap}
+              iconBg="bg-green-100"
+              iconColor="text-green-600"
+              title="Análise Rápida"
+              description="Resultados em segundos com base no seu endereço"
+            />
+            <FeatureCard
+              icon={Sun}
+              iconBg="bg-yellow-100"
+              iconColor="text-yellow-600"
+              title="Dados Precisos"
+              description="Cálculos baseados na irradiação solar de São Paulo"
+            />
+            <FeatureCard
+              icon={Leaf}
+              iconBg="bg-green-100"
+              iconColor="text-green-600"
+              title="Impacto Real"
+              description="Veja sua contribuição para um planeta mais verde"
+            />
           </div>
 
           <Button 

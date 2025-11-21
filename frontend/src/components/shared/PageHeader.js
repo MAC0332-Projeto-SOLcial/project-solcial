@@ -1,4 +1,5 @@
-import { Sun, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { Logo } from "../../ui/logo";
 
 // Componente reutilizável para header de páginas
 const PageHeader = ({ onBack }) => (
@@ -14,10 +15,7 @@ const PageHeader = ({ onBack }) => (
           <span>Voltar</span>
         </button>
       </div>
-      <div className="flex items-center space-x-2">
-        <Sun className="w-8 h-8 text-yellow-500" />
-        <span className="text-2xl font-bold text-gray-900">SOLcial</span>
-      </div>
+      <Logo textColor="text-gray-900" />
       <div className="w-24"></div>
     </nav>
 
@@ -30,10 +28,7 @@ const PageHeader = ({ onBack }) => (
         <ArrowLeft className="w-5 h-5" />
         <span>Voltar</span>
       </button>
-      <div className="flex items-center space-x-2">
-        <Sun className="w-8 h-8 text-yellow-500" />
-        <span className="text-2xl font-bold text-gray-900">SOLcial</span>
-      </div>
+      <Logo textColor="text-gray-900" />
       <div className="w-16"></div>
     </div>
   </>
