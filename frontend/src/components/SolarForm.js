@@ -541,7 +541,7 @@ const SolarForm = ({ onSubmit, onBack }) => {
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-yellow-50 flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
         
-        {/* Mobile: Single Card with Steps */}
+       
         <div className="md:hidden">
           <Card 
             className="shadow-xl border-0"
@@ -568,7 +568,7 @@ const SolarForm = ({ onSubmit, onBack }) => {
           </Card>
         </div>
 
-        {/* Desktop: Single Card with Steps */}
+        
         <div className="hidden md:block">
           <div className="flex items-start justify-between space-x-8">
             <button 
