@@ -51,6 +51,7 @@ router.get('/', async (req, res) => {
 
         const responsePayload = {
             formattedAddress: formattedAddress,
+            maxPanels: solarResponse.maxArrayPanelsCount,
             solarMetrics: solarMetrics
         }
 
