@@ -2,10 +2,21 @@ const express = require('express');
 const router = express.Router();
 const geocoding = require('../services/api/geocoding');
 const solar = require('../services/api/solarApiService');
+const SolarMetrics = require('../services/api/solarMetrics');
+
+const { CONSTANTS, ERROR_MESSAGES } = require('../utils/enums');
 
 const validatePayload = (payload) => {
     if (!payload?.address) {
         throw new Error("O campo 'address' é obrigatório");
+    }
+
+    if (!Array.isArray(payload.spentEnergyKwh) || payload.spentEnergyKwh.length === 0) {
+        throw new Error("O campo 'spentEnergyKwh' deve ser uma lista com 3 valores");
+    }
+
+    if (!Array.isArray(payload.spentMoney) || payload.spentMoney.length === 0) {
+        throw new Error("O campo 'spentMoney' deve ser uma lista com 3 valores");
     }
 };
 
@@ -19,7 +30,7 @@ router.get('/', async (req, res) => {
     try {
         validatePayload(req.body);
         
-        const { address } = req.body;
+        const { address, spentEnergyKwh, spentMoney } = req.body;
         const geocodingResponse = await geocoding.getCoordinates(address);
 
         if (geocodingResponse.status !== "OK") {
@@ -30,15 +41,19 @@ router.get('/', async (req, res) => {
         const formattedAddress = geocodingResponse.results[0].formatted_address;
 
         const solarResponse = await solar.getSolarPotential(location.lat, location.lng);
-        
+
         if (!solarResponse.success) {
             throw new Error(solarResponse.error?.message);
         }
 
-        responsePayload = {
+        // mandamos uma placa? ou o minimo da API é 4?
+        const metrics = new SolarMetrics();
+        const solarMetrics = metrics.getSolarMetrics(solarResponse, CONSTANTS.ONE, spentEnergyKwh, spentMoney);
+
+        const responsePayload = {
             formattedAddress: formattedAddress,
-            solar: solarResponse
-        };
+            solarMetrics: solarMetrics
+        }
 
         res.status(200).json(responsePayload);
     } catch (error) {
