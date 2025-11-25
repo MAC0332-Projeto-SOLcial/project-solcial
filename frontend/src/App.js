@@ -16,7 +16,6 @@ function App() {
   const handleDataSubmit = (data) => {
     setUserData(data);
     setCurrentState("loading");
-
   };
 
   const handleComoFunciona = () => {

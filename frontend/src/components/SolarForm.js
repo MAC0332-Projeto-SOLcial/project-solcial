@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Card } from "../ui/card";
+import { StepIndicator } from "../ui/step-indicator";
 import { MapPin, Zap, ArrowLeft, DollarSign } from "lucide-react";
 import { LoadingSpinner } from '../ui/loadingspinner';
 
@@ -374,14 +375,16 @@ const SolarForm = ({ onSubmit, onBack }) => {
       <Button 
         onClick={handleNext}
         disabled={!street.trim() || !number.trim() || zipCode.replace(/\D/g, '').length !== 8 || zipCodeStatus === 'loading' || numberError || zipCodeError}
-        className="w-full bg-green-600 hover:bg-green-700 text-white py-3 md:hidden"
+        variant="default"
+        className="w-full md:hidden"
       >
         Próximo
       </Button>
       <Button 
         onClick={handleNext}
         disabled={!street.trim() || !number.trim() || zipCode.replace(/\D/g, '').length !== 8 || zipCodeStatus === 'loading' || numberError || zipCodeError}
-        className="hidden md:block w-full bg-green-600 hover:bg-green-700 text-white py-3 mt-6"
+        variant="default"
+        className="hidden md:block w-full mt-6"
       >
         Próximo
       </Button>
@@ -453,7 +456,8 @@ const SolarForm = ({ onSubmit, onBack }) => {
       <Button 
         onClick={handleNext}
         disabled={!areAllBillsValid()}
-        className="w-full bg-green-600 hover:bg-green-700 text-white py-3"
+        variant="default"
+        className="w-full"
         >
         Próximo
       </Button>
@@ -525,7 +529,8 @@ const SolarForm = ({ onSubmit, onBack }) => {
       <Button 
         onClick={handleSubmit}
         disabled={!areAllKwhValid()}
-        className="w-full bg-green-600 hover:bg-green-700 text-white py-3"
+        variant="default"
+        className="w-full"
       >
         Calcular Potencial Solar
       </Button>
@@ -536,7 +541,7 @@ const SolarForm = ({ onSubmit, onBack }) => {
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-yellow-50 flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
         
-        {/* Mobile: Single Card with Steps */}
+       
         <div className="md:hidden">
           <Card 
             className="shadow-xl border-0"
@@ -548,11 +553,7 @@ const SolarForm = ({ onSubmit, onBack }) => {
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </button>
-                <div className="flex justify-center space-x-2 mb-4">
-                  <div className={`w-3 h-3 rounded-full transition-colors ${step === 1 ? 'bg-green-600' : 'bg-gray-300'}`}></div>
-                  <div className={`w-3 h-3 rounded-full transition-colors ${step === 2 ? 'bg-green-600' : 'bg-gray-300'}`}></div>
-                  <div className={`w-3 h-3 rounded-full transition-colors ${step === 3 ? 'bg-green-600' : 'bg-gray-300'}`}></div>
-                </div>
+                <StepIndicator currentStep={step} totalSteps={3} className="mb-4" />
                 <h3 className="text-2xl text-gray-900">
                   {getStepTitle()}
                 </h3>
@@ -567,7 +568,7 @@ const SolarForm = ({ onSubmit, onBack }) => {
           </Card>
         </div>
 
-        {/* Desktop: Single Card with Steps */}
+        
         <div className="hidden md:block">
           <div className="flex items-start justify-between space-x-8">
             <button 
