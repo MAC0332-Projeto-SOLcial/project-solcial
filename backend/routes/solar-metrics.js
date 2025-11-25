@@ -28,10 +28,36 @@ const validatePayload = (payload) => {
  */
 router.get('/', async (req, res) => {
     try {
-        validatePayload(req.body);
+        const address = req.query.address || '';
+        let energyConsumptionKwh = [];
+        let spentMoney = [];
         
-        const { address, energyConsumptionKwh, spentMoney } = req.body;
-        const geocodingResponse = await geocoding.getCoordinates(address);
+        try {
+            energyConsumptionKwh = req.query.energyConsumptionKwh 
+                ? JSON.parse(req.query.energyConsumptionKwh) 
+                : [];
+        } catch (e) {
+            throw new Error('Formato inválido para energyConsumptionKwh');
+        }
+        
+        try {
+            spentMoney = req.query.spentMoney 
+                ? JSON.parse(req.query.spentMoney) 
+                : [];
+        } catch (e) {
+            throw new Error('Formato inválido para spentMoney');
+        }
+        
+        const payload = {
+            address: address.trim(),
+            energyConsumptionKwh: energyConsumptionKwh,
+            spentMoney: spentMoney
+        };
+        
+        validatePayload(payload);
+        
+        const finalAddress = payload.address;
+        const geocodingResponse = await geocoding.getCoordinates(finalAddress);
 
         if (geocodingResponse.status !== "OK") {
             throw new Error(geocodingResponse.error?.message);
@@ -47,7 +73,7 @@ router.get('/', async (req, res) => {
         }
 
         const metrics = new SolarMetrics();
-        const solarMetrics = metrics.getSolarMetrics(solarResponse, CONSTANTS.ONE, energyConsumptionKwh, spentMoney);
+        const solarMetrics = metrics.getSolarMetrics(solarResponse, CONSTANTS.ONE, payload.energyConsumptionKwh, payload.spentMoney);
 
         const responsePayload = {
             formattedAddress: formattedAddress,

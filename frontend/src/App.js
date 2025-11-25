@@ -12,14 +12,16 @@ function App() {
   const [userData, setUserData] = useState(null);
 
   const handleGetStarted = () => {
+    
     setCurrentState("input");
   };
 
   const handleDataSubmit = async (formData) => {
+    
     setCurrentState("loading");
     
     try {
-      const requestBody = {
+      const requestData = {
         address: formData.address.trim(),
         energyConsumptionKwh: [
           formData.kwhConsumption1,
@@ -35,12 +37,19 @@ function App() {
 
       const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001';
       
-      const response = await fetch(`${apiUrl}/solar-metrics`, {
+      const params = new URLSearchParams({
+        address: requestData.address,
+        energyConsumptionKwh: JSON.stringify(requestData.energyConsumptionKwh),
+        spentMoney: JSON.stringify(requestData.spentMoney)
+      });
+      
+      const fullUrl = `${apiUrl}/solar-metrics?${params.toString()}`;
+      
+      const response = await fetch(fullUrl, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody)
+        }
       });
 
       if (!response.ok) {
@@ -55,6 +64,7 @@ function App() {
       }
 
       const apiData = await response.json();
+      
       const userData = {
         address: formData.address.trim(),
         monthlyBill1: formData.monthlyBill1,
@@ -70,7 +80,6 @@ function App() {
       setCurrentState("results");
       toast.success('Potencial solar calculado com sucesso!');
     } catch (error) {
-      console.error('Erro ao calcular potencial solar:', error);
       toast.error(error.message || 'Erro ao calcular potencial solar. Tente novamente.');
       setCurrentState("input");
     }
