@@ -33,7 +33,9 @@ function App() {
         ]
       };
 
-      const response = await fetch('http://localhost:3000/solar-metrics', {
+      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+      
+      const response = await fetch(`${apiUrl}/solar-metrics`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
