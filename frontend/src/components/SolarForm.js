@@ -47,6 +47,8 @@ const SolarForm = ({ onSubmit, onBack }) => {
   const [kwh1Error, setKwh1Error] = useState(null);
   const [kwh2Error, setKwh2Error] = useState(null);
   const [kwh3Error, setKwh3Error] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiError, setApiError] = useState(null);
   const address = `${street.trim()} ${number.trim()}`;
 
   const areAllBillsValid = () => {
@@ -235,7 +237,7 @@ const SolarForm = ({ onSubmit, onBack }) => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (step === 3) {
         if (!areAllKwhValid()) {
             validateKwhBill(kwhConsumption1, setKwh1Error);
@@ -245,15 +247,59 @@ const SolarForm = ({ onSubmit, onBack }) => {
         }
         
         if (address.trim() && areAllBillsValid() && areAllKwhValid()) {
-            onSubmit({
-                address: address.trim(),
-                monthlyBill1: parseFloat(monthlyBill1),
-                monthlyBill2: parseFloat(monthlyBill2),
-                monthlyBill3: parseFloat(monthlyBill3),
-                kwhConsumption1: parseInt(kwhConsumption1),
-                kwhConsumption2: parseInt(kwhConsumption2),
-                kwhConsumption3: parseInt(kwhConsumption3),
-            });
+            setIsLoading(true);
+            setApiError(null);
+            
+            try {
+                const requestBody = {
+                    address: address.trim(),
+                    energyConsumptionKwh: [
+                        parseInt(kwhConsumption1),
+                        parseInt(kwhConsumption2),
+                        parseInt(kwhConsumption3)
+                    ],
+                    spentMoney: [
+                        parseFloat(monthlyBill1),
+                        parseFloat(monthlyBill2),
+                        parseFloat(monthlyBill3)
+                    ]
+                };
+
+                const response = await fetch('http://localhost:3000/solar-metrics', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    let errorMessage = 'Erro ao calcular potencial solar';
+                    try {
+                        const errorData = await response.json();
+                        errorMessage = errorData.error || errorMessage;
+                    } catch (e) {
+                        errorMessage = `Erro ${response.status}: ${response.statusText}`;
+                    }
+                    throw new Error(errorMessage);
+                }
+
+                const data = await response.json();
+                onSubmit({
+                    address: address.trim(),
+                    monthlyBill1: parseFloat(monthlyBill1),
+                    monthlyBill2: parseFloat(monthlyBill2),
+                    monthlyBill3: parseFloat(monthlyBill3),
+                    kwhConsumption1: parseInt(kwhConsumption1),
+                    kwhConsumption2: parseInt(kwhConsumption2),
+                    kwhConsumption3: parseInt(kwhConsumption3),
+                    apiResponse: data
+                });
+            } catch (error) {
+                console.error('Erro ao chamar API:', error);
+                setApiError(error.message || 'Erro ao calcular potencial solar. Tente novamente.');
+                setIsLoading(false);
+            }
         }
     }
   };
@@ -526,13 +572,25 @@ const SolarForm = ({ onSubmit, onBack }) => {
           )}
         </div>
       </div>
+      {apiError && (
+        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-sm text-red-600">{apiError}</p>
+        </div>
+      )}
       <Button 
         onClick={handleSubmit}
-        disabled={!areAllKwhValid()}
+        disabled={!areAllKwhValid() || isLoading}
         variant="default"
         className="w-full"
       >
-        Calcular Potencial Solar
+        {isLoading ? (
+          <span className="flex items-center justify-center">
+            <LoadingSpinner className="h-5 w-5 border-2 mr-2" />
+            Calculando...
+          </span>
+        ) : (
+          'Calcular Potencial Solar'
+        )}
       </Button>
     </div>
   );

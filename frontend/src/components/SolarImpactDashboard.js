@@ -84,6 +84,9 @@ export default function SolarImpactDashboard({ userData, onBack }) {
 
   return (
     <div className="p-8 space-y-8 bg-gradient-to-br from-green-50 to-yellow-50 min-h-screen">
+      <div>
+        {userData}
+      </div>
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-800">Seu Potencial Solar</h1>
         <div className="space-x-2">
