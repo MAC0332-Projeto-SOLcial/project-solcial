@@ -81,7 +81,7 @@ describe('SolarApiService', () => {
         const mockResponse = {
           solarPotential: {
             maxArrayPanelsCount: 100,
-            solarPanelConfigs: [
+            solarPanels: [
               {
                 panelsCount: 50,
                 yearlyEnergyDcKwh: 10000
@@ -100,7 +100,8 @@ describe('SolarApiService', () => {
         // Assert
         expect(result.success).toBe(true);
         expect(result.maxArrayPanelsCount).toBe(100);
-        
+        expect(result.solarPanels).toEqual(mockResponse.solarPotential.solarPanels);
+        expect(result.maxSunshineHoursPerYear).toBe(2500);
         expect(result.carbonOffsetFactorKgPerMwh).toBe(0.5);
         expect(httpGet).toHaveBeenCalledTimes(1);
         expect(httpGet).toHaveBeenCalledWith(
@@ -131,7 +132,7 @@ describe('SolarApiService', () => {
         // Assert
         expect(result.success).toBe(true);
         expect(result.maxArrayPanelsCount).toBe(0);
-        //expect(result.solarPanelConfigs).toEqual([]);
+        expect(result.solarPanels).toEqual([]);
         expect(result.maxSunshineHoursPerYear).toBe(0);
         expect(result.carbonOffsetFactorKgPerMwh).toBe(0);
       });
