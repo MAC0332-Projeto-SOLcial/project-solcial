@@ -47,28 +47,31 @@ npm install
 ```
 
 ### Executando o Projeto
-#### docker
+
+**Ordem de execução:** Execute primeiro o Frontend, depois o Backend.
+
+#### 1. Frontend (porta 3000)
 ```bash
-cd backend
-cd DockerImages 
-docker-compose up -d
-
+cd frontend
+npm start
 ```
-O servidor estará rodando em `http://localhost:8081`  usuario:user senha:solcial
+A aplicação estará rodando em `http://localhost:3000`
 
-#### Backend
+#### 2. Backend (porta 3001)
 ```bash
 cd backend
 npm start
 ```
 O servidor estará rodando em `http://localhost:3001`
 
-#### Frontend
+#### Docker (Opcional)
 ```bash
-cd frontend
-npm start
+cd backend
+cd DockerImages 
+docker-compose up -d
+
 ```
-A aplicação estará rodando em `http://localhost:3000`
+O Mongo Express estará rodando em `http://localhost:8081`  usuario:user senha:solcial
 
 ### Scripts Disponíveis
 
@@ -107,6 +110,8 @@ A aplicação estará rodando em `http://localhost:3000`
 1. Clone o repositório
 2. Instale as dependências do backend e frontend
 3. Configure as variáveis de ambiente
-4. Execute o backend e frontend em terminais separados
+4. Execute em terminais separados nesta ordem:
+   - Primeiro: Frontend (porta 3000)
+   - Depois: Backend (porta 3001)
 
 
