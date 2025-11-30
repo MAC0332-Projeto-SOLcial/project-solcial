@@ -45,6 +45,7 @@ const SolarImpactDashboard = ({ userData, onBack }) => {
         carbonWithoutPanels: sm.carbonImpactTenYears?.carbonWithoutPanels || [],
         carbonWithPanels: sm.carbonImpactTenYears?.carbonWithPanels || [],
         carbonSavings: sm.carbonImpactTenYears?.carbonSavings || [],
+        carbonSavingsNegative: sm.carbonImpactTenYears?.carbonSavingsNegative || [],
       };
     return {
       investimento: sm.estimatedInvestment,
@@ -59,6 +60,7 @@ const SolarImpactDashboard = ({ userData, onBack }) => {
         carbonWithoutPanels: impact.carbonWithoutPanels,
         carbonWithPanels: impact.carbonWithPanels,
         carbonSavings: impact.carbonSavings,
+        carbonSavingsNegative: impact.carbonSavingsNegative,
       },
     };
   });
@@ -101,6 +103,7 @@ const SolarImpactDashboard = ({ userData, onBack }) => {
         carbonWithoutPanels: sm.carbonImpactTenYears?.carbonWithoutPanels,
         carbonWithPanels: sm.carbonImpactTenYears?.carbonWithPanels,
         carbonSavings: sm.carbonImpactTenYears?.carbonSavings,
+        carbonSavingsNegative: sm.carbonImpactTenYears?.carbonSavingsNegative,
       };
       const novoSolarData = {
         investimento: sm.estimatedInvestment,
@@ -115,6 +118,7 @@ const SolarImpactDashboard = ({ userData, onBack }) => {
           carbonWithoutPanels: impact.carbonWithoutPanels,
           carbonWithPanels: impact.carbonWithPanels,
           carbonSavings: impact.carbonSavings,
+          carbonSavingsNegative: impact.carbonSavingsNegative,
         },
       };
 
@@ -151,9 +155,7 @@ const SolarImpactDashboard = ({ userData, onBack }) => {
 
   const graficoCarbono = carbono.years.map((y, i) => ({
     ano: y,
-    sem: carbono.carbonWithoutPanels[i],
-    com: carbono.carbonWithPanels[i],
-    economia: carbono.carbonSavings[i],
+    economiaNegativa: carbono.carbonSavingsNegative[i],
   }));
 
   const gerarPDF = () => {
@@ -266,7 +268,7 @@ const SolarImpactDashboard = ({ userData, onBack }) => {
                 type="monotone"
                 dataKey="valor"
                 name="Economia acumulada (R$)"
-                stroke="#22c55e"
+                stroke="#ca7111ff"
                 strokeWidth={3}
               />
             </LineChart>
@@ -290,17 +292,10 @@ const SolarImpactDashboard = ({ userData, onBack }) => {
               />
               <Line
                 type="monotone"
-                dataKey="sem"
-                name="Sem painéis"
-                stroke="#ef4444"
-                strokeWidth={2}
-              />
-              <Line
-                type="monotone"
-                dataKey="com"
-                name="Com painéis"
-                stroke="#22c55e"
-                strokeWidth={2}
+                dataKey="economiaNegativa"
+                name="Decaimento da emissão de carbono (kg)"
+                stroke="#05c887ff"
+                strokeWidth={3}
               />
             </LineChart>
           </ResponsiveContainer>
