@@ -168,6 +168,7 @@ class SolarMetrics {
         const carbonWithoutPanels = [];
         const carbonWithPanels = [];
         const carbonSavings = [];
+        const carbonSavingsNegative = [];
 
         let accWithout = 0;
         let accWith = 0;
@@ -182,13 +183,15 @@ class SolarMetrics {
             carbonWithoutPanels.push(accWithout);
             carbonWithPanels.push(accWith);
             carbonSavings.push(accSavings);
+            carbonSavingsNegative.push(-accSavings);
         }
 
         return {
             years,
             carbonWithoutPanels,
             carbonWithPanels,
-            carbonSavings
+            carbonSavings,
+            carbonSavingsNegative
         };
     }
 
