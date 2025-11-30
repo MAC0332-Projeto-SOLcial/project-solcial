@@ -31,46 +31,107 @@ const InfoCard = ({ icon: Icon, iconBg, iconColor, title, children }) => (
 );
 
 const SolarImpactDashboard = ({ userData, onBack }) => {
-  const api = userData.apiResponse;
+  const api = userData?.apiResponse || {};
+  const initialSolarMetrics = api.solarMetrics || {};
 
-  const maxPlacas = api.maxPanels;
+  const maxPlacas = typeof api.maxPanels === "number" ? api.maxPanels : (initialSolarMetrics.recommendedPanels || 1);
+
   const [numPlacas, setNumPlacas] = useState(maxPlacas);
-  const [solarData, setSolarData] = useState(null);
 
-  useEffect(() => {
-    recalcular(maxPlacas);
-  }, []);
-
-  const recalcular = (placas) => {
-  const fator = placas / maxPlacas;
-
-  const base = api.solarMetrics;
-  const carbonoBase = base.carbonImpactTenYears;
-
-  const carbonoComEscala = carbonoBase.carbonWithPanels.map(v => v * fator);
-  const economiaCarbonoEscalada = carbonoBase.carbonSavings.map(v => v * fator);
-
-  setSolarData({
-    investimento: base.estimatedInvestment * fator,
-    energiaAnual: base.yearlyGeneratedEnergy * fator,
-    economiaAnual: base.yearlyFinancialEconomy * fator,
-    gastoPainel: base.yearlySpentWithPanels * fator,
-    retorno: base.timeForInvestmentRecovery,
-    co2Economia: base.yearlyCarbonEconomy * fator,
-
-    economia10anos: base.savedMoneyTenYears.map((v) => v * fator),
-
-    carbono: {
-      years: carbonoBase.years,
-      carbonWithoutPanels: carbonoBase.carbonWithoutPanels,
-      carbonWithPanels: carbonoComEscala,
-      carbonSavings: economiaCarbonoEscalada,
-    }
+  const [solarData, setSolarData] = useState(() => {
+    const sm = initialSolarMetrics;
+    const impact = {
+        years: sm.carbonImpactTenYears?.years || [],
+        carbonWithoutPanels: sm.carbonImpactTenYears?.carbonWithoutPanels || [],
+        carbonWithPanels: sm.carbonImpactTenYears?.carbonWithPanels || [],
+        carbonSavings: sm.carbonImpactTenYears?.carbonSavings || [],
+      };
+    return {
+      investimento: sm.estimatedInvestment,
+      energiaAnual: sm.yearlyGeneratedEnergy,
+      economiaAnual: sm.yearlyFinancialEconomy,
+      gastoPainel: sm.yearlySpentWithPanels,
+      retorno: sm.timeForInvestmentRecovery,
+      co2Economia: sm.yearlyCarbonEconomy,
+      economia10anos: Array.isArray(sm.savedMoneyTenYears) ? sm.savedMoneyTenYears : [],
+      carbono: {
+        years: impact.years,
+        carbonWithoutPanels: impact.carbonWithoutPanels,
+        carbonWithPanels: impact.carbonWithPanels,
+        carbonSavings: impact.carbonSavings,
+      },
+    };
   });
-};
+
+  const [loading, setLoading] = useState(false);
+
+  const recalcular = async (placas) => {
+    try {
+      setLoading(true);
+
+      const params = new URLSearchParams({
+        address: userData?.address || api.formattedAddress || "",
+        energyConsumptionKwh: JSON.stringify([
+          userData?.kwhConsumption1,
+          userData?.kwhConsumption2,
+          userData?.kwhConsumption3,
+        ]),
+        spentMoney: JSON.stringify([
+          userData?.monthlyBill1,
+          userData?.monthlyBill2,
+          userData?.monthlyBill3,
+        ]),
+        numPanels: String(placas),
+      });
+
+      const baseUrl = process.env.REACT_APP_API_URL || "http://localhost:3001";
+      const url = `${baseUrl}/solar-metrics?${params.toString()}`;
+
+      const resp = await fetch(url);
+      if (!resp.ok) {
+        const errBody = await resp.json().catch(() => ({}));
+        throw new Error(errBody.error || `Erro na requisição: ${resp.status}`);
+      }
+
+      const json = await resp.json();
+
+      const sm = json.solarMetrics || {};
+      const impact = {
+        years: sm.carbonImpactTenYears?.years,
+        carbonWithoutPanels: sm.carbonImpactTenYears?.carbonWithoutPanels,
+        carbonWithPanels: sm.carbonImpactTenYears?.carbonWithPanels,
+        carbonSavings: sm.carbonImpactTenYears?.carbonSavings,
+      };
+      const novoSolarData = {
+        investimento: sm.estimatedInvestment,
+        energiaAnual: sm.yearlyGeneratedEnergy,
+        economiaAnual: sm.yearlyFinancialEconomy,
+        gastoPainel: sm.yearlySpentWithPanels,
+        retorno: sm.timeForInvestmentRecovery,
+        co2Economia: sm.yearlyCarbonEconomy,
+        economia10anos: Array.isArray(sm.savedMoneyTenYears) ? sm.savedMoneyTenYears : [],
+        carbono: {
+          years: impact.years,
+          carbonWithoutPanels: impact.carbonWithoutPanels,
+          carbonWithPanels: impact.carbonWithPanels,
+          carbonSavings: impact.carbonSavings,
+        },
+      };
+
+      setSolarData(novoSolarData);
+
+      if (typeof json.maxPanels === "number") {
+        if (numPlacas > json.maxPanels) setNumPlacas(json.maxPanels);
+      }
+    } catch (error) {
+      console.error("Erro ao recalcular:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
-  if (!solarData) return <div className="p-8">Carregando...</div>;
+  if (!solarData && !loading) return <div className="p-8">Carregando...</div>;
 
   const {
     investimento,
