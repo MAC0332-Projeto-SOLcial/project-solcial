@@ -60,6 +60,10 @@ class SolarMetrics {
         return CONSTANTS.NINETYSIX * yearlyGeneratedEnergy;
     }
 
+    getCarbonOffset(carbonOffsetFactorKgPerMwh) {
+        return carbonOffsetFactorKgPerMwh / 1000;
+    }
+
     /**
      * 
      * @param {*} yearlyGeneratedEnergy 
@@ -96,26 +100,28 @@ class SolarMetrics {
     /**
      * 
      * @param {*} yearlyEnergyConsumption 
+     * @param {*} carbonFactor
      * @returns {double} Emissão de carbono aproximada anualmente, sem uso de paineis
      */
-    getYearlyCarbonEmissionWithoutPanels(yearlyEnergyConsumption) {
-        return yearlyEnergyConsumption * SOLAR_CONSTANTS.CARBON_EMISSIONS;
+    getYearlyCarbonEmissionWithoutPanels(yearlyEnergyConsumption, carbonFactor) {
+        return yearlyEnergyConsumption * carbonFactor;
     }
 
     /**
      * 
      * @param {*} yearlyGeneratedEnergy 
      * @param {*} yearlyEnergyConsumption 
+     * @param {*} carbonFactor
      * @returns {double} Emissão de carbono aproximada anualmente, com uso de paineis
      */
-    getYearlyCarbonEmissionWithPanels(yearlyGeneratedEnergy, yearlyEnergyConsumption) {        
+    getYearlyCarbonEmissionWithPanels(yearlyGeneratedEnergy, yearlyEnergyConsumption, carbonFactor) {        
         if (yearlyGeneratedEnergy >= yearlyEnergyConsumption) {
             return 0;
         }
 
         const totalEnergySpent = yearlyEnergyConsumption - yearlyGeneratedEnergy;
 
-        return totalEnergySpent * SOLAR_CONSTANTS.CARBON_EMISSIONS;
+        return totalEnergySpent * carbonFactor;
     }
     
     /**
@@ -141,13 +147,15 @@ class SolarMetrics {
     /**
      * 
      * @param {*} yearlyFinancialEconomy 
+     * @param {*} estimatedInvestment
      * @returns {array double} Lista com dinheiro economizado ao longo de 10 anos
      */
-    getSavedMoneyTenYears(yearlyFinancialEconomy) {
+    getSavedMoneyTenYears(yearlyFinancialEconomy, estimatedInvestment) {
         const years = 10;
         const savings = [];
 
-        let accumulatedSavings = 0;
+        let accumulatedSavings = -estimatedInvestment;
+        savings.push(accumulatedSavings);
 
         for (let i = 1; i <= years; i++) {
             accumulatedSavings += yearlyFinancialEconomy;
@@ -156,6 +164,7 @@ class SolarMetrics {
 
         return savings;
     }
+
 
     /**
      * 
@@ -208,12 +217,14 @@ class SolarMetrics {
         const estimatedInvestment = this.getEstimatedInvestiment(panelsNumber);
        
         const yearlyGeneratedEnergy = this.getYearlyGeneratedEnergy(solarResponse.solarPanels, panelsNumber);
+
+        const carbonFactor = this.getCarbonOffset(solarResponse.carbonOffsetFactorKgPerMwh);
        
         const yearlyFinancialEconomy = this.getYearlyFinancialEconomy(yearlyGeneratedEnergy, yearlyEnergyConsumption, yearlySpentMoney);
         
-        const yearlySpentWithPanels = this.getYearlySpentWithPanels(yearlyGeneratedEnergy, yearlyEnergyConsumption);
+        const yearlySpentWithPanels = this.getYearlySpentWithPanels(yearlyGeneratedEnergy, yearlyEnergyConsumption, carbonFactor);
          
-        const yearlyCarbonEmissionWithoutPanels = this.getYearlyCarbonEmissionWithoutPanels(yearlyEnergyConsumption);
+        const yearlyCarbonEmissionWithoutPanels = this.getYearlyCarbonEmissionWithoutPanels(yearlyEnergyConsumption, carbonFactor);
 
         const yearlyCarbonEmissionWithPanels = this.getYearlyCarbonEmissionWithPanels(yearlyGeneratedEnergy, yearlyEnergyConsumption);
     
@@ -222,7 +233,7 @@ class SolarMetrics {
         const timeForInvestmentRecovery = this.getTimeForinvestmentRecovery(estimatedInvestment, yearlyFinancialEconomy);
 
         // Arrays
-        const savedMoneyTenYears = this.getSavedMoneyTenYears(yearlyFinancialEconomy);
+        const savedMoneyTenYears = this.getSavedMoneyTenYears(yearlyFinancialEconomy, estimatedInvestment);
         
         const carbonImpactTenYears = this.getCarbonImpactTenYears(yearlyCarbonEmissionWithoutPanels, yearlyCarbonEmissionWithPanels);
     

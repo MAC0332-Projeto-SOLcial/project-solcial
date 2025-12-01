@@ -79,7 +79,12 @@ router.get('/', async (req, res) => {
         }
 
         const metrics = new SolarMetrics();
-        const solarMetrics = metrics.getSolarMetrics(solarResponse, numPanels, payload.energyConsumptionKwh, payload.spentMoney);
+        const solarMetrics = metrics.getSolarMetrics(
+            solarResponse, 
+            numPanels, 
+            payload.energyConsumptionKwh, 
+            payload.spentMoney
+        );
 
         const responsePayload = {
             formattedAddress: formattedAddress,
