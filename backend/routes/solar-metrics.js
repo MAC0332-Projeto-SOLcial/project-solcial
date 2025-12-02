@@ -4,7 +4,7 @@ const geocoding = require('../services/api/geocoding');
 const solar = require('../services/api/solarApiService');
 const SolarMetrics = require('../services/api/solarMetrics');
 
-const { CONSTANTS, ERROR_MESSAGES } = require('../utils/enums');
+const { ERROR_MESSAGES } = require('../utils/enums');
 
 const validatePayload = (payload) => {
     if (!payload?.address) {
@@ -28,13 +28,45 @@ const validatePayload = (payload) => {
  */
 router.get('/', async (req, res) => {
     try {
-        validatePayload(req.body);
-        
-        const { address, energyConsumptionKwh, spentMoney } = req.body;
-        const geocodingResponse = await geocoding.getCoordinates(address);
+        const address = req.query.address || '';
+        let energyConsumptionKwh = [];
+        let spentMoney = [];
 
-        if (geocodingResponse.status !== "OK") {
-            throw new Error(geocodingResponse.error?.message);
+        let numPanels = parseInt(req.query.numPanels || "1", 10);
+        
+        try {
+            energyConsumptionKwh = req.query.energyConsumptionKwh 
+                ? JSON.parse(req.query.energyConsumptionKwh) 
+                : [];
+        } catch (e) {
+            throw new Error(ERROR_MESSAGES.INVALID_ENERGY_CONSUMPTION_KWH);
+        }
+        
+        try {
+            spentMoney = req.query.spentMoney 
+                ? JSON.parse(req.query.spentMoney) 
+                : [];
+        } catch (e) {
+            throw new Error(ERROR_MESSAGES.INVALID_SPENT_MONEY);
+        }
+        
+        const payload = {
+            address: address.trim(),
+            energyConsumptionKwh: energyConsumptionKwh,
+            spentMoney: spentMoney
+        };
+        
+        validatePayload(payload);
+
+        if (energyConsumptionKwh.length !== spentMoney.length) {
+            throw new Error(ERROR_MESSAGES.INVALID_LIST_SIZE);
+        }
+
+        const finalAddress = payload.address;
+        const geocodingResponse = await geocoding.getCoordinates(finalAddress);
+
+        if (geocodingResponse.status !== "OK" || !geocodingResponse.results?.length) {
+            throw new Error(ERROR_MESSAGES.ADRESS_NOT_FOUND);
         }
 
         const location = geocodingResponse.results[0].geometry.location;
@@ -43,11 +75,16 @@ router.get('/', async (req, res) => {
         const solarResponse = await solar.getSolarPotential(location.lat, location.lng);
 
         if (!solarResponse.success) {
-            throw new Error(solarResponse.error?.message);
+            throw new Error(ERROR_MESSAGES.SOLAR_FAILED);
         }
 
         const metrics = new SolarMetrics();
-        const solarMetrics = metrics.getSolarMetrics(solarResponse, CONSTANTS.ONE, energyConsumptionKwh, spentMoney);
+        const solarMetrics = metrics.getSolarMetrics(
+            solarResponse, 
+            numPanels, 
+            payload.energyConsumptionKwh, 
+            payload.spentMoney
+        );
 
         const responsePayload = {
             formattedAddress: formattedAddress,

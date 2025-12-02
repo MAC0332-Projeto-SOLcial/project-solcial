@@ -245,15 +245,18 @@ const SolarForm = ({ onSubmit, onBack }) => {
         }
         
         if (address.trim() && areAllBillsValid() && areAllKwhValid()) {
-            onSubmit({
+            const formData = {
                 address: address.trim(),
                 monthlyBill1: parseFloat(monthlyBill1),
                 monthlyBill2: parseFloat(monthlyBill2),
                 monthlyBill3: parseFloat(monthlyBill3),
                 kwhConsumption1: parseInt(kwhConsumption1),
                 kwhConsumption2: parseInt(kwhConsumption2),
-                kwhConsumption3: parseInt(kwhConsumption3),
-            });
+                kwhConsumption3: parseInt(kwhConsumption3)
+            };
+            
+            // Passa os dados do formulário para o App, que fará a requisição
+            onSubmit(formData);
         }
     }
   };
