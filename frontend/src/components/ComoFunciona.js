@@ -98,7 +98,7 @@ const ComoFunciona = ({ onBack, onGetStarted }) => {
             icon={Zap}
             stepTitle="Qual o seu consumo de energia?"
             title="Conte-nos sobre sua conta de luz:"
-            description="Para que a nossa análise seja personalizada, informe os valores das suas últimas 3 contas de energia. Essas informações são essenciais para calcularmos com precisão a economia que você pode alcançar."
+            description="Para que a nossa análise seja personalizada, informe o valor médio mensal da sua conta de energia. Essa informação é essencial para calcularmos com precisão a ec  onomia que você pode alcançar."
           />
 
           {/* Passo 3 */}

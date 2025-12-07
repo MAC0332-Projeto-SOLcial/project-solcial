@@ -44,7 +44,7 @@ const SobreNos = ({ onBack, onGetStarted }) => {
     "Karla P A y Silva",
     "Laís Nuto Rossman",
     "Lucas Escobar",
-    "Marcelo Sabaris Carballo Pinto",
+    "Marcelo S C Pinto",
     "Maysa Cristina Claudino da Silva",
     "Rodrigo de Castro Michelassi"
   ];
@@ -52,7 +52,11 @@ const SobreNos = ({ onBack, onGetStarted }) => {
   // Mapeamento de nomes para arquivos de imagem
   const getImagePath = (nome) => {
     const imageMap = {
-      "Karla P A y Silva": "/images/equipe/karla.JPG"
+      "Fernando Gouveia Lima": "/images/equipe/fernando.jpg",
+      "Karla P A y Silva": "/images/equipe/karla.JPG",
+      "Laís Nuto Rossman": "/images/equipe/lais.jpg",
+      "Maysa Cristina Claudino da Silva": "/images/equipe/maysa.jpg",
+      "Rodrigo de Castro Michelassi": "/images/equipe/rodrigo.jpg"
     };
     return imageMap[nome] || null;
   };
@@ -104,7 +108,7 @@ const SobreNos = ({ onBack, onGetStarted }) => {
             title="Um Projeto Acadêmico com Propósito Real"
           >
             <p className="text-base text-gray-700 leading-relaxed mb-4">
-              Este projeto foi desenvolvido por alunos da Universidade de São Paulo (USP), como parte da disciplina MAC5783/0332 Engenharia de Software.
+              Este projeto foi desenvolvido por alunos da Universidade de São Paulo (USP), como parte da disciplina MAC5783 Engenharia de Software.
             </p>
             <p className="text-base text-gray-700 leading-relaxed mb-4">
               Nosso compromisso é com a transparência e o conhecimento aberto. Por isso, o código-fonte do projeto está disponível para todos.
