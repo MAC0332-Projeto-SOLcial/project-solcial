@@ -3,7 +3,6 @@ import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import PageHeader from "./shared/PageHeader";
 
-// Componente reutilizável para cards com ícone
 const InfoCard = ({ icon: Icon, iconBg, iconColor, title, children }) => (
   <Card className="shadow-md">
     <div className="flex items-start space-x-4 p-6">
@@ -18,7 +17,6 @@ const InfoCard = ({ icon: Icon, iconBg, iconColor, title, children }) => (
   </Card>
 );
 
-// Componente reutilizável para membro da equipe
 const TeamMember = ({ nome, imagePath }) => (
   <div className="flex flex-col items-center w-full max-w-[140px]">
     <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center mb-3 overflow-hidden">
@@ -77,7 +75,6 @@ const SobreNos = ({ onBack, onGetStarted }) => {
           </p>
         </div>
 
-        {/* Cards Section */}
         <div className="px-6 lg:px-8 py-8 lg:py-12 space-y-6">
           <InfoCard
             icon={Target}
@@ -156,7 +153,6 @@ const SobreNos = ({ onBack, onGetStarted }) => {
                     />
                   ))}
                 </div>
-                {/* Segunda linha - 3 membros centralizados */}
                 <div className="flex flex-wrap justify-center gap-6">
                   {equipe.slice(4, 7).map((membro, index) => (
                     <TeamMember 
@@ -170,7 +166,6 @@ const SobreNos = ({ onBack, onGetStarted }) => {
             </div>
           </Card>
 
-          {/* Nossa Visão */}
           <InfoCard
             icon={Eye}
             iconBg="bg-yellow-100"
@@ -181,7 +176,6 @@ const SobreNos = ({ onBack, onGetStarted }) => {
               Sonhamos com uma São Paulo onde cada telhado é uma pequena usina de energia limpa. Junte-se a nós na construção de um futuro mais justo, econômico e sustentável.
             </p>
 
-            {/* Faça Parte da Revolução Solar */}
             <div className="bg-green-50 border border-green-200 rounded-lg p-6 mt-6">
               <h3 className="text-xl font-bold text-gray-900 mb-3">
                 Faça Parte da Revolução Solar
@@ -202,7 +196,6 @@ const SobreNos = ({ onBack, onGetStarted }) => {
           </InfoCard>
         </div>
 
-        {/* Transformando São Paulo Section */}
         <div className="bg-green-50 px-6 lg:px-8 py-12 lg:py-16">
           <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6 text-center">
             Transformando São Paulo, um telhado por vez

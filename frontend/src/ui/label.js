@@ -1,6 +1,6 @@
-import React from 'react';
+import { forwardRef } from 'react';
 
-const Label = React.forwardRef(({ className = '', ...props }, ref) => {
+const Label = forwardRef(({ className = '', ...props }, ref) => {
   return (
     <label
       ref={ref}

@@ -3,7 +3,7 @@ import { Logo } from "../../ui/logo";
 
 // Componente reutilizável para header de páginas
 const PageHeader = ({ onBack }) => (
-  <>
+  <> 
     <nav className="hidden md:flex items-center justify-between p-6 lg:px-8">
       <div className="flex items-center space-x-2">
         <button 
@@ -18,6 +18,7 @@ const PageHeader = ({ onBack }) => (
       <div className="w-24"></div>
     </nav>
 
+   
     <div className="md:hidden flex items-center justify-between p-6">
       <button 
         onClick={onBack}

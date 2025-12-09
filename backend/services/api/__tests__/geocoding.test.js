@@ -1,11 +1,16 @@
-const { geocoding } = require('../geocoding');
 const httpGet = require('../http-get');
 
 // Mock do httpGet
 jest.mock('../http-get');
 
-describe('geocoding', () => {
+// Mock do dotenv para evitar que carregue variáveis do arquivo .env
+jest.mock('dotenv', () => ({
+  config: jest.fn(() => ({})),
+}));
+
+describe('Geocoding', () => {
   const originalEnv = process.env;
+  let geocoding;
 
   beforeEach(() => {
     // Limpa os mocks antes de cada teste
@@ -20,10 +25,17 @@ describe('geocoding', () => {
   });
 
   describe('sucesso', () => {
+    beforeEach(() => {
+      process.env.GCLOUD_API_KEY = 'test-api-key';
+      process.env.GOOGLE_GEOCODING_API_URL = 'https://maps.googleapis.com';
+      jest.isolateModules(() => {
+        geocoding = require('../geocoding');
+      });
+    });
+
     it('deve retornar dados de geocoding quando a API responde com sucesso', async () => {
       // Arrange
       const mockAddress = 'rua do matao 1010';
-      const mockApiKey = 'test-api-key';
       const mockResponse = {
         results: [
           {
@@ -39,11 +51,10 @@ describe('geocoding', () => {
         status: 'OK'
       };
 
-      process.env.GCLOUD_API_KEY = mockApiKey;
       httpGet.mockResolvedValue(mockResponse);
 
       // Act
-      const result = await geocoding(mockAddress);
+      const result = await geocoding.getCoordinates(mockAddress);
 
       // Assert
       expect(result).toEqual(mockResponse);
@@ -53,7 +64,7 @@ describe('geocoding', () => {
         '/maps/api/geocode/json',
         {
           address: mockAddress,
-          key: mockApiKey
+          key: 'test-api-key'
         }
       );
     });
@@ -61,14 +72,12 @@ describe('geocoding', () => {
     it('deve chamar httpGet com os parâmetros corretos', async () => {
       // Arrange
       const mockAddress = 'São Paulo, SP';
-      const mockApiKey = 'test-key-123';
       const mockResponse = { status: 'OK', results: [] };
 
-      process.env.GCLOUD_API_KEY = mockApiKey;
       httpGet.mockResolvedValue(mockResponse);
 
       // Act
-      await geocoding(mockAddress);
+      await geocoding.getCoordinates(mockAddress);
 
       // Assert
       expect(httpGet).toHaveBeenCalledWith(
@@ -76,35 +85,70 @@ describe('geocoding', () => {
         '/maps/api/geocode/json',
         {
           address: mockAddress,
-          key: mockApiKey
+          key: 'test-api-key'
         }
       );
     });
-  });
 
-  describe('erros', () => {
-    it('deve lançar erro quando GCLOUD_API_KEY não está definida', async () => {
-      // Arrange
-      delete process.env.GCLOUD_API_KEY;
-      const mockAddress = 'rua do matao 1010';
-
+    it('deve lançar erro quando endereço não é fornecido', async () => {
       // Act & Assert
-      await expect(geocoding(mockAddress)).rejects.toThrow(
-        'GCLOUD_API_KEY não encontrada nas variáveis de ambiente'
+      await expect(geocoding.getCoordinates(null)).rejects.toThrow(
+        'Endereço é obrigatório'
       );
       expect(httpGet).not.toHaveBeenCalled();
     });
 
-    it('deve lançar erro quando GCLOUD_API_KEY está vazia', async () => {
-      // Arrange
-      process.env.GCLOUD_API_KEY = '';
-      const mockAddress = 'rua do matao 1010';
-
+    it('deve lançar erro quando endereço está vazio', async () => {
       // Act & Assert
-      await expect(geocoding(mockAddress)).rejects.toThrow(
-        'GCLOUD_API_KEY não encontrada nas variáveis de ambiente'
+      await expect(geocoding.getCoordinates('')).rejects.toThrow(
+        'Endereço é obrigatório'
       );
       expect(httpGet).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('erros de inicialização', () => {
+    it('deve lançar erro quando GCLOUD_API_KEY não está definida', () => {
+      // Arrange
+      delete process.env.GCLOUD_API_KEY;
+      process.env.GOOGLE_GEOCODING_API_URL = 'https://maps.googleapis.com';
+
+      // Act & Assert
+      jest.isolateModules(() => {
+        delete process.env.GCLOUD_API_KEY;
+        expect(() => {
+          require('../geocoding');
+        }).toThrow('GCLOUD_API_KEY não configurada');
+      });
+    });
+
+    it('deve lançar erro quando GOOGLE_GEOCODING_API_URL não está definida', () => {
+      // Arrange
+      process.env.GCLOUD_API_KEY = 'test-api-key';
+      delete process.env.GOOGLE_GEOCODING_API_URL;
+
+      // Act & Assert
+      jest.isolateModules(() => {
+        delete process.env.GOOGLE_GEOCODING_API_URL;
+        expect(() => {
+          require('../geocoding');
+        }).toThrow('GOOGLE_GEOCODING_API_URL não configurada');
+      });
+    });
+
+    it('deve lançar erro quando ambas as variáveis não estão definidas', () => {
+      // Arrange
+      delete process.env.GCLOUD_API_KEY;
+      delete process.env.GOOGLE_GEOCODING_API_URL;
+
+      // Act & Assert
+      jest.isolateModules(() => {
+        delete process.env.GCLOUD_API_KEY;
+        delete process.env.GOOGLE_GEOCODING_API_URL;
+        expect(() => {
+          require('../geocoding');
+        }).toThrow('GCLOUD_API_KEY não configurada');
+      });
     });
   });
 });
