@@ -64,7 +64,9 @@ function App() {
 
       {currentState === "results" && userData && (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-yellow-50">
-         
+          <div className="text-center">
+            <p className="text-lg text-gray-600">Resultados em desenvolvimento...</p>
+          </div>
         </div>
       )}
 
