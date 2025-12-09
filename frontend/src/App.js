@@ -3,7 +3,6 @@ import Homepage from './components/Home';
 import SolarForm from './components/SolarForm';
 import SobreNos from './components/SobreNos';
 import ComoFunciona from './components/ComoFunciona';
-import Contato from './components/Contato';
 
 function App() {
   const [currentState, setCurrentState] = useState("homepage");
@@ -27,16 +26,12 @@ function App() {
     setCurrentState("sobre-nos");
   };
 
-  const handleContato = () => {
-    setCurrentState("contato");
-  };
-
   const handleBack = () => {
     if (currentState === "input") {
       setCurrentState("homepage");
     } else if (currentState === "results") {
       setCurrentState("input");
-    } else if (currentState === "como-funciona" || currentState === "sobre-nos" || currentState === "contato") {
+    } else if (currentState === "como-funciona" || currentState === "sobre-nos") {
       setCurrentState("homepage");
     }
   };
@@ -48,7 +43,6 @@ function App() {
           onGetStarted={handleGetStarted}
           onComoFunciona={handleComoFunciona}
           onSobreNos={handleSobreNos}
-          onContato={handleContato}
         />
       )}
 
@@ -80,10 +74,6 @@ function App() {
 
       {currentState === "sobre-nos" && (
         <SobreNos onBack={handleBack} onGetStarted={handleGetStarted} />
-      )}
-
-      {currentState === "contato" && (
-        <Contato onBack={handleBack} />
       )}
     </div>
   );

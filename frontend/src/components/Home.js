@@ -1,7 +1,7 @@
 import { Button } from "../ui/button";
 import { Sun, Leaf, Zap } from "lucide-react";
 
-const Homepage = ({ onGetStarted, onComoFunciona, onSobreNos, onContato }) => {
+const Homepage = ({ onGetStarted, onComoFunciona, onSobreNos }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-yellow-50">
       {/* Desktop Navigation */}
@@ -22,12 +22,6 @@ const Homepage = ({ onGetStarted, onComoFunciona, onSobreNos, onContato }) => {
             className="text-gray-600 hover:text-green-600 transition-colors"
           >
             Sobre Nós
-          </button>
-          <button 
-            onClick={onContato}
-            className="text-gray-600 hover:text-green-600 transition-colors"
-          >
-            Contato
           </button>
         </div>
       </nav>
