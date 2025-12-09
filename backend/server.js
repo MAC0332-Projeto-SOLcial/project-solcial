@@ -6,9 +6,10 @@ require('dotenv').config();
 const rootRoutes = require('./routes/root');
 const coordinates = require('./routes/coordinates');
 const apisolar = require('./routes/apisolar');
+const solarMetrics = require('./routes/solar-metrics');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use('/', rootRoutes);
 app.use('/coordinates', coordinates);
 app.use('/apisolar', apisolar);
+app.use('/solar-metrics', solarMetrics);
 
 // 404 handler
 app.use((req, res) => {
@@ -47,4 +49,5 @@ app.listen(PORT, () => {
   console.log(`🌞 Solar API endpoints:`);
   console.log(`   - GET http://localhost:${PORT}/apisolar`);
   console.log(`   - GET http://localhost:${PORT}/coordinates`);
+  console.log(`   - GET http://localhost:${PORT}/solar-metrics`);
 });

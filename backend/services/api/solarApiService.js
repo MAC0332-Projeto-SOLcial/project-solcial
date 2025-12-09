@@ -51,7 +51,7 @@ class SolarApiService {
       return {
         success: true,
         maxArrayPanelsCount: solarPotential.maxArrayPanelsCount || 0,
-        solarPanelConfigs: solarPotential.solarPanelConfigs || [],
+        solarPanels: solarPotential.solarPanels || [],
         maxSunshineHoursPerYear: solarPotential.maxSunshineHoursPerYear || 0,
         carbonOffsetFactorKgPerMwh: solarPotential.carbonOffsetFactorKgPerMwh || 0,
       }
@@ -64,7 +64,7 @@ class SolarApiService {
         }
       }
     }
-  }     
+  }
 
   /**
    * Calcula a área aproximada de um bounding box
