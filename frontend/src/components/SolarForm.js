@@ -84,7 +84,8 @@ const SolarForm = ({ onSubmit, onBack }) => {
                   <Button 
                     onClick={handleNext}
                     disabled={!address.trim()}
-                    className="w-full bg-green-600 hover:bg-green-700 text-white py-3"
+                    variant="default"
+                    className="w-full"
                   >
                     Próximo
                   </Button>
@@ -114,7 +115,8 @@ const SolarForm = ({ onSubmit, onBack }) => {
                   <Button 
                     onClick={handleSubmit}
                     disabled={!monthlyBill || parseFloat(monthlyBill) <= 0}
-                    className="w-full bg-green-600 hover:bg-green-700 text-white py-3"
+                    variant="default"
+                    className="w-full"
                   >
                     Calcular Potencial Solar
                   </Button>
@@ -204,7 +206,8 @@ const SolarForm = ({ onSubmit, onBack }) => {
                 <Button 
                   onClick={handleSubmit}
                   disabled={!address.trim() || !monthlyBill || parseFloat(monthlyBill) <= 0}
-                  className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 text-lg"
+                  variant="default"
+                  size="lg"
                 >
                   Calcular Potencial Solar
                 </Button>

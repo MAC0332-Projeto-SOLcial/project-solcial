@@ -192,7 +192,8 @@ const SobreNos = ({ onBack, onGetStarted }) => {
               <div className="flex justify-center">
                 <Button 
                   onClick={onGetStarted}
-                  className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-medium shadow-md hover:shadow-lg transition-all duration-300"
+                  variant="default"
+                  size="lg"
                 >
                   Calcular Meu Potencial Solar
                 </Button>
