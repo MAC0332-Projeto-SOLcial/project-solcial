@@ -226,7 +226,7 @@ class SolarMetrics {
          
         const yearlyCarbonEmissionWithoutPanels = this.getYearlyCarbonEmissionWithoutPanels(yearlyEnergyConsumption, carbonFactor);
 
-        const yearlyCarbonEmissionWithPanels = this.getYearlyCarbonEmissionWithPanels(yearlyGeneratedEnergy, yearlyEnergyConsumption);
+        const yearlyCarbonEmissionWithPanels = this.getYearlyCarbonEmissionWithPanels(yearlyGeneratedEnergy, yearlyEnergyConsumption, carbonFactor);
     
         const yearlyCarbonEconomy = this.getYearlyCarbonEconomy(yearlyCarbonEmissionWithoutPanels, yearlyCarbonEmissionWithPanels);
 

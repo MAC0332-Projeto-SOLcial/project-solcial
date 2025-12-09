@@ -53,12 +53,25 @@ function App() {
       });
 
       if (!response.ok) {
-        let errorMessage = 'Erro ao calcular potencial solar';
+        let errorMessage = 'Erro ao calcular potencial solar. Por favor, tente novamente.';
         try {
           const errorData = await response.json();
-          errorMessage = errorData.error || errorMessage;
+          
+          if (response.status === 400) {
+            errorMessage = 'Não foi possível processar sua solicitação. Verifique os dados informados e tente novamente.';
+          } else if (response.status === 404) {
+            errorMessage = 'Serviço não encontrado. Tente novamente mais tarde.';
+          } else if (response.status >= 500) {
+            errorMessage = 'Erro no servidor. Por favor, tente novamente em alguns instantes.';
+          } else {
+            errorMessage = errorData.error || errorMessage;
+          }
         } catch (e) {
-          errorMessage = `Erro ${response.status}: ${response.statusText}`;
+          if (response.status === 400) {
+            errorMessage = 'Erro ao processar os dados. Verifique as informações e tente novamente.';
+          } else {
+            errorMessage = `Erro ${response.status}: ${response.statusText}`;
+          }
         }
         throw new Error(errorMessage);
       }

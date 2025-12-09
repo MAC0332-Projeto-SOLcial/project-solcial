@@ -13,7 +13,6 @@ async function httpGet(baseUrl, path, queryParams = {}) {
     const url = `${baseUrl}${path}`;
     
     // Faz a requisição GET com axios
-    console.log(`Fazendo requisição para: ${url}, params: ${JSON.stringify(queryParams)}`);
     const response = await axios.get(url, {
       params: queryParams
     });
