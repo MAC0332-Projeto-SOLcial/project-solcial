@@ -65,7 +65,7 @@ router.get('/', async (req, res) => {
         const finalAddress = payload.address;
         const geocodingResponse = await geocoding.getCoordinates(finalAddress);
 
-        if (geocodingResponse.status !== "OK" || !geocodingResponse.results?.length) {
+        if (!geocodingResponse || geocodingResponse.status !== "OK" || !geocodingResponse.results?.length) {
             throw new Error(ERROR_MESSAGES.ADRESS_NOT_FOUND);
         }
 

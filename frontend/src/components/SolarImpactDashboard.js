@@ -36,7 +36,7 @@ const SolarImpactDashboard = ({ userData, onBack }) => {
 
   const maxPlacas = typeof api.maxPanels === "number" ? api.maxPanels : (initialSolarMetrics.recommendedPanels || 1);
 
-  const [numPlacas, setNumPlacas] = useState(maxPlacas);
+  const [numPlacas, setNumPlacas] = useState(1);
 
   const [solarData, setSolarData] = useState(() => {
     const sm = initialSolarMetrics;
@@ -91,8 +91,27 @@ const SolarImpactDashboard = ({ userData, onBack }) => {
 
       const resp = await fetch(url);
       if (!resp.ok) {
-        const errBody = await resp.json().catch(() => ({}));
-        throw new Error(errBody.error || `Erro na requisição: ${resp.status}`);
+        let errorMessage = 'Erro ao recalcular. Por favor, tente novamente.';
+        try {
+          const errBody = await resp.json();
+          // Mensagens amigáveis para o usuário
+          if (resp.status === 400) {
+            errorMessage = 'Não foi possível recalcular. Verifique os dados e tente novamente.';
+          } else if (resp.status === 404) {
+            errorMessage = 'Serviço não encontrado. Tente novamente mais tarde.';
+          } else if (resp.status >= 500) {
+            errorMessage = 'Erro no servidor. Por favor, tente novamente em alguns instantes.';
+          } else {
+            errorMessage = errBody.error || errorMessage;
+          }
+        } catch (e) {
+          if (resp.status === 400) {
+            errorMessage = 'Erro ao processar os dados. Tente novamente.';
+          } else {
+            errorMessage = `Erro ${resp.status}: ${resp.statusText}`;
+          }
+        }
+        throw new Error(errorMessage);
       }
 
       const json = await resp.json();
@@ -129,6 +148,7 @@ const SolarImpactDashboard = ({ userData, onBack }) => {
       }
     } catch (error) {
       console.error("Erro ao recalcular:", error);
+      alert(error.message || 'Erro ao recalcular. Por favor, tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -169,16 +189,16 @@ const SolarImpactDashboard = ({ userData, onBack }) => {
     pdf.text(`Endereço analisado: ${api.formattedAddress}`, 10, 30);
     pdf.text(`Número de placas escolhido: ${numPlacas}`, 10, 40);
 
-    pdf.text(`Investimento estimado: R$ ${investimento.toFixed(2)}`, 10, 55);
-    pdf.text(`Economia anual: R$ ${economiaAnual.toFixed(2)}`, 10, 65);
-    pdf.text(`Energia anual gerada: ${energiaAnual.toFixed(2)} kWh`, 10, 75);
-    pdf.text(`CO2 economizado/ano: ${co2Economia.toFixed(2)} kg`, 10, 85);
-    pdf.text(`Tempo de retorno: ${retorno.toFixed(1)} anos`, 10, 95);
+    pdf.text(`Investimento estimado: R$ ${investimento?.toFixed(2)}`, 10, 55);
+    pdf.text(`Economia anual: R$ ${economiaAnual?.toFixed(2)}`, 10, 65);
+    pdf.text(`Energia anual gerada: ${energiaAnual?.toFixed(2)} kWh`, 10, 75);
+    pdf.text(`CO2 economizado/ano: ${co2Economia?.toFixed(2)} kg`, 10, 85);
+    pdf.text(`Tempo de retorno: ${retorno?.toFixed(1)} anos`, 10, 95);
 
     pdf.text("Economia acumulada (10 anos):", 10, 115);
 
     economia10anos.forEach((v, i) => {
-      pdf.text(`Ano ${i + 1}: R$ ${v.toFixed(2)}`, 10, 125 + i * 7);
+      pdf.text(`Ano ${i + 1}: R$ ${v?.toFixed(2)}`, 10, 125 + i * 7);
     });
 
     pdf.save("relatorio_solar.pdf");
@@ -217,17 +237,17 @@ const SolarImpactDashboard = ({ userData, onBack }) => {
           >
             <p className="text-gray-600">Investimento Estimado:</p>
             <p className="text-2xl font-bold text-green-700 mb-3">
-              R$ {investimento.toFixed(2)}
+              R$ {investimento?.toFixed(2)}
             </p>
 
             <p className="text-gray-600">Economia Anual:</p>
             <p className="text-xl font-semibold text-green-700 mb-3">
-              R$ {economiaAnual.toFixed(2)}
+              R$ {economiaAnual?.toFixed(2)}
             </p>
 
             <p className="text-gray-600">Retorno estimado:</p>
             <p className="text-lg font-semibold text-gray-800">
-              {retorno.toFixed(1)} anos
+              {retorno?.toFixed(1)} anos
             </p>
           </InfoCard>
 
@@ -239,12 +259,12 @@ const SolarImpactDashboard = ({ userData, onBack }) => {
           >
             <p className="text-gray-600">Economia de CO₂ anual:</p>
             <p className="text-2xl font-bold text-blue-700 mb-3">
-              {co2Economia.toFixed(2)} kg
+              {co2Economia?.toFixed(2)} kg
             </p>
 
             <p className="text-gray-600">Energia limpa gerada por ano:</p>
             <p className="text-xl font-semibold text-blue-700">
-              {energiaAnual.toFixed(1)} kWh
+              {energiaAnual?.toFixed(1)} kWh
             </p>
           </InfoCard>
         </div>
@@ -259,7 +279,7 @@ const SolarImpactDashboard = ({ userData, onBack }) => {
             <LineChart data={graficoEconomia}>
               <XAxis dataKey="ano" />
               <YAxis />
-              <Tooltip formatter={(value) => value.toFixed(2)} />
+              <Tooltip formatter={(value) => value?.toFixed(2)} />
               <Legend
                 verticalAlign="top"
                 wrapperStyle={{ paddingBottom: 20, fontSize: 14 }}
@@ -285,7 +305,7 @@ const SolarImpactDashboard = ({ userData, onBack }) => {
             <LineChart data={graficoCarbono}>
               <XAxis dataKey="ano" />
               <YAxis />
-              <Tooltip formatter={(value) => value.toFixed(2)} />
+              <Tooltip formatter={(value) => value?.toFixed(2)} />
               <Legend
                 verticalAlign="top"
                 wrapperStyle={{ paddingBottom: 20, fontSize: 14 }}
