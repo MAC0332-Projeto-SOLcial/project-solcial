@@ -1,14 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import PageHeader from "./shared/PageHeader";
-import { Sun, Leaf, Zap, PiggyBank, BarChart2 } from "lucide-react";
+import { Sun, Leaf, PiggyBank, BarChart2 } from "lucide-react";
 import jsPDF from "jspdf";
+import { toast } from "react-toast";
 import {
   LineChart,
   Line,
-  BarChart,
-  Bar,
   XAxis,
   YAxis,
   Tooltip,
@@ -146,9 +145,11 @@ const SolarImpactDashboard = ({ userData, onBack }) => {
       if (typeof json.maxPanels === "number") {
         if (numPlacas > json.maxPanels) setNumPlacas(json.maxPanels);
       }
+      
+      toast.success('Cálculo atualizado com sucesso!');
     } catch (error) {
       console.error("Erro ao recalcular:", error);
-      alert(error.message || 'Erro ao recalcular. Por favor, tente novamente.');
+      toast.error(error.message || 'Erro ao recalcular. Por favor, tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -161,7 +162,6 @@ const SolarImpactDashboard = ({ userData, onBack }) => {
     investimento,
     energiaAnual,
     economiaAnual,
-    gastoPainel,
     retorno,
     co2Economia,
     economia10anos,
@@ -221,6 +221,10 @@ const SolarImpactDashboard = ({ userData, onBack }) => {
         >
           <p className="text-gray-700">
             Endereço analisado: <strong>{api.formattedAddress}</strong>
+          </p>
+          <p className="text-gray-700 mt-2">
+            Valores calculados para:{" "}
+            <span className="font-semibold text-blue-600">{numPlacas} {numPlacas === 1 ? 'placa' : 'placas'}</span>
           </p>
           <p className="text-gray-700 mt-2">
             Máximo de placas suportado pelo telhado:{" "}
