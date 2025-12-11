@@ -567,7 +567,64 @@ const SolarForm = ({ onSubmit, onBack }) => {
             }
             contentClassName="space-y-6"
           >
-              {renderStepContent()}
+              {step === 1 ? (
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3 p-4 bg-green-50 rounded-lg">
+                    <MapPin className="w-6 h-6 text-green-600" />
+                    <div>
+                      <h3 className="font-medium text-gray-900">Localização</h3>
+                      <p className="text-sm text-gray-600">São Paulo, SP</p>
+                    </div>
+                  </div>
+                  <Input
+                    id="address"
+                    label="Endereço completo"
+                    placeholder="Ex: Rua das Flores, 123, Vila Mariana"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    className="text-base"
+                  />
+                  <Button 
+                    onClick={handleNext}
+                    disabled={!address.trim()}
+                    variant="default"
+                    className="w-full"
+                  >
+                    Próximo
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3 p-4 bg-yellow-50 rounded-lg">
+                    <Zap className="w-6 h-6 text-yellow-600" />
+                    <div>
+                      <h3 className="font-medium text-gray-900">Conta de Energia</h3>
+                      <p className="text-sm text-gray-600">Valor médio mensal</p>
+                    </div>
+                  </div>
+                  <div className="relative">
+                    <Input
+                      id="monthlyBill"
+                      label="Valor da conta mensal (R$)"
+                      type="number"
+                      placeholder="350,00"
+                      value={monthlyBill}
+                      onChange={(e) => setMonthlyBill(e.target.value)}
+                      className="pl-10 text-base"
+                      min="0"
+                      step="0.01"
+                    />
+                  </div>
+                  <Button 
+                    onClick={handleSubmit}
+                    disabled={!monthlyBill || parseFloat(monthlyBill) <= 0}
+                    variant="default"
+                    className="w-full"
+                  >
+                    Calcular Potencial Solar
+                  </Button>
+                </div>
+              )}
           </Card>
         </div>
 
@@ -589,25 +646,74 @@ const SolarForm = ({ onSubmit, onBack }) => {
                   Precisamos de algumas informações para fornecer uma análise precisa
                 </p>
               </div>
-              <div className="flex justify-center space-x-4 mb-8">
-                <div className="text-center">
-                  <div className={`mx-auto w-10 h-10 rounded-full flex items-center justify-center font-bold text-white transition-colors border-2 ${step === 1 ? 'bg-green-600 border-green-600' : 'bg-gray-300 border-gray-300'}`}>1</div>
-                  <p className="text-sm mt-1 text-gray-700">Localização</p>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-10 h-0.5 bg-gray-300"></div>
-                </div>
-                <div className="text-center">
-                  <div className={`mx-auto w-10 h-10 rounded-full flex items-center justify-center font-bold text-white transition-colors border-2 ${step === 2 ? 'bg-green-600 border-green-600' : 'bg-gray-300 border-gray-300'}`}>2</div>
-                  <p className="text-sm mt-1 text-gray-700">Conta de Energia (R$)</p>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-10 h-0.5 bg-gray-300"></div>
-                </div>
-                <div className="text-center">
-                  <div className={`mx-auto w-10 h-10 rounded-full flex items-center justify-center font-bold text-white transition-colors border-2 ${step === 3 ? 'bg-green-600 border-green-600' : 'bg-gray-300 border-gray-300'}`}>3</div>
-                  <p className="text-sm mt-1 text-gray-700">Consumo (kWh)</p>
-                </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Address Card */}
+                <Card 
+                  className="shadow-lg border-0"
+                  header={
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                        <MapPin className="w-5 h-5 text-green-600" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold">Localização</h3>
+                        <p className="text-sm text-gray-600">São Paulo, SP</p>
+                      </div>
+                    </div>
+                  }
+                  contentClassName="space-y-4"
+                >
+                  <Input
+                    id="address-desktop"
+                    label="Endereço completo"
+                    placeholder="Ex: Rua das Flores, 123, Vila Mariana"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
+                </Card>
+
+                {/* Monthly Bill Card */}
+                <Card 
+                  className="shadow-lg border-0"
+                  header={
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+                        <Zap className="w-5 h-5 text-yellow-600" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold">Conta de Energia</h3>
+                        <p className="text-sm text-gray-600">Valor médio mensal</p>
+                      </div>
+                    </div>
+                  }
+                  contentClassName="space-y-4"
+                >
+                  <div className="relative">
+                   
+                    <Input
+                      id="monthlyBill-desktop"
+                      label="Valor da conta mensal (R$)"
+                      type="number"
+                      placeholder="350,00"
+                      value={monthlyBill}
+                      onChange={(e) => setMonthlyBill(e.target.value)}
+                      min="0"
+                      step="0.01"
+                    />
+                  </div>
+                </Card>
+              </div>
+
+              <div className="mt-8 text-center">
+                <Button 
+                  onClick={handleSubmit}
+                  disabled={!address.trim() || !monthlyBill || parseFloat(monthlyBill) <= 0}
+                  variant="default"
+                  size="lg"
+                >
+                  Calcular Potencial Solar
+                </Button>
               </div>
               <Card 
                 className="shadow-xl border-0"

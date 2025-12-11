@@ -1,11 +1,8 @@
 import { useState } from 'react';
 import Homepage from './components/Home';
 import SolarForm from './components/SolarForm';
-import SolarImpactDashboard from "./components/SolarImpactDashboard";
 import SobreNos from './components/SobreNos';
 import ComoFunciona from './components/ComoFunciona';
-import { LoadingSpinner } from './ui/loadingspinner';
-import { ToastContainer, toast } from 'react-toast';
 
 function App() {
   const [currentState, setCurrentState] = useState("homepage");
@@ -146,7 +143,9 @@ function App() {
 
       {currentState === "results" && userData && (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-yellow-50">
-         <SolarImpactDashboard userData={userData} onBack={handleBack} />
+          <div className="text-center">
+            <p className="text-lg text-gray-600">Resultados em desenvolvimento...</p>
+          </div>
         </div>
       )}
 

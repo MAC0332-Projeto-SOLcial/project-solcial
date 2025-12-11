@@ -42,14 +42,19 @@ const SobreNos = ({ onBack, onGetStarted }) => {
     "Karla P A y Silva",
     "Laís Nuto Rossman",
     "Lucas Escobar",
-    "Marcelo Sabaris Carballo Pinto",
+    "Marcelo S C Pinto",
     "Maysa Cristina Claudino da Silva",
     "Rodrigo de Castro Michelassi"
   ];
 
+  // Mapeamento de nomes para arquivos de imagem
   const getImagePath = (nome) => {
     const imageMap = {
-      "Karla P A y Silva": "/images/equipe/karla.JPG"
+      "Fernando Gouveia Lima": "/images/equipe/fernando.jpg",
+      "Karla P A y Silva": "/images/equipe/karla.JPG",
+      "Laís Nuto Rossman": "/images/equipe/lais.jpg",
+      "Maysa Cristina Claudino da Silva": "/images/equipe/maysa.jpg",
+      "Rodrigo de Castro Michelassi": "/images/equipe/rodrigo.jpg"
     };
     return imageMap[nome] || null;
   };
@@ -58,10 +63,12 @@ const SobreNos = ({ onBack, onGetStarted }) => {
     <div className="min-h-screen bg-white">
       <PageHeader onBack={onBack} />
 
+      {/* Main Content */}
       <div className="max-w-4xl mx-auto">
+        {/* Nossa Missão Section */}
         <div className="bg-green-50 px-6 lg:px-8 py-12 lg:py-16">
           <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6 text-center lg:text-left">
-            Nossa Missão é Democratizar informação sobre fontes de energia renováveis
+            Nossa Missão é Democratizar o Sol para Todos
           </h1>
           <p className="text-lg text-gray-700 leading-relaxed max-w-3xl">
             O SOLcial nasceu de um propósito claro: dar a cada morador e pequeno comerciante de São Paulo o poder de gerar sua própria energia limpa, economizar dinheiro e construir um futuro mais sustentável.
@@ -98,7 +105,7 @@ const SobreNos = ({ onBack, onGetStarted }) => {
             title="Um Projeto Acadêmico com Propósito Real"
           >
             <p className="text-base text-gray-700 leading-relaxed mb-4">
-              Este projeto foi desenvolvido por alunos da Universidade de São Paulo (USP), como parte da disciplina MAC5783/0332 Engenharia de Software.
+              Este projeto foi desenvolvido por alunos da Universidade de São Paulo (USP), como parte da disciplina MAC5783 Engenharia de Software.
             </p>
             <p className="text-base text-gray-700 leading-relaxed mb-4">
               Nosso compromisso é com a transparência e o conhecimento aberto. Por isso, o código-fonte do projeto está disponível para todos.
@@ -117,6 +124,7 @@ const SobreNos = ({ onBack, onGetStarted }) => {
             </div>
           </InfoCard>
 
+          {/* Nossa Equipe */}
           <Card className="shadow-md">
             <div className="p-6">
               <div className="flex items-start space-x-4 mb-6">
@@ -133,7 +141,9 @@ const SobreNos = ({ onBack, onGetStarted }) => {
                 </div>
               </div>
 
+              {/* Grid de Membros da Equipe */}
               <div className="mt-8 space-y-6">
+                {/* Primeira linha - 4 membros */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 justify-items-center">
                   {equipe.slice(0, 4).map((membro, index) => (
                     <TeamMember 
