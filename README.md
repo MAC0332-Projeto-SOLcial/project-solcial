@@ -89,8 +89,9 @@ O Mongo Express estará rodando em `http://localhost:8081`  usuario:user senha:s
 ### Variáveis de Ambiente
 
 1. **Backend** (`backend/.env`):
-   - `GOOGLE_SOLAR_API_KEY` - Chave da Google Solar API
-   - `GOOGLE_MAPS_API_KEY` - Chave da Google Maps API
+   - `GCLOUD_API_KEY` - Chave da API do Google Cloud Platform
+   - `GOOGLE_SOLAR_API_URL` - URL da Google Solar API (padrão: https://solar.googleapis.com/v1)
+   - `GOOGLE_GEOCODING_API_URL` - URL da Google Geocoding API (padrão: https://maps.googleapis.com)
    - `PORT` - Porta do servidor (padrão: 3001)
 
 2. **Frontend** (`frontend/.env`):
@@ -113,5 +114,9 @@ O Mongo Express estará rodando em `http://localhost:8081`  usuario:user senha:s
 4. Execute em terminais separados nesta ordem:
    - Primeiro: Frontend (porta 3000)
    - Depois: Backend (porta 3001)
+
+> **Documentação técnica:**
+> - Para detalhes sobre os endpoints disponíveis, consulte o [README do backend](backend/README.md).
+> - Para informações sobre configuração do frontend, consulte o [README do frontend](frontend/README.md).
 
 
