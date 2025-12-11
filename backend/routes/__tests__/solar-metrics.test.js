@@ -1,3 +1,5 @@
+const { ERROR_MESSAGES } = require('../../utils/enums');
+
 const request = require('supertest');
 const express = require('express');
 const cors = require('cors');
@@ -96,10 +98,10 @@ describe('GET /solar-metrics', () => {
       // Act
       const response = await request(app)
         .get('/solar-metrics')
-        .send({
+        .query({
           address,
-          energyConsumptionKwh,
-          spentMoney
+          energyConsumptionKwh: JSON.stringify(energyConsumptionKwh),
+          spentMoney: JSON.stringify(spentMoney)
         })
         .expect(200);
 
@@ -138,14 +140,14 @@ describe('GET /solar-metrics', () => {
       // Act
       const response = await request(app)
         .get('/solar-metrics')
-        .send({
-          energyConsumptionKwh,
-          spentMoney
+        .query({
+          energyConsumptionKwh: JSON.stringify(energyConsumptionKwh),
+          spentMoney: JSON.stringify(spentMoney)
         })
         .expect(400);
 
       // Assert
-      expect(response.body.error).toBe("O campo 'address' é obrigatório");
+      expect(response.body.error).toBe(ERROR_MESSAGES.ADDRESS_REQUIRED);
       expect(geocoding.getCoordinates).not.toHaveBeenCalled();
       expect(solar.getSolarPotential).not.toHaveBeenCalled();
     });
@@ -158,14 +160,15 @@ describe('GET /solar-metrics', () => {
       // Act
       const response = await request(app)
         .get('/solar-metrics')
-        .send({
+        .query({
           address,
-          spentMoney
+          spentMoney: JSON.stringify(spentMoney)
         })
         .expect(400);
 
+
       // Assert
-      expect(response.body.error).toBe("O campo 'spentEnergyKwh' deve ser uma lista com 3 valores");
+      expect(response.body.error).toBe(ERROR_MESSAGES.ENERGY_CONSUMPTION_REQUIRED);
       expect(geocoding.getCoordinates).not.toHaveBeenCalled();
     });
 
@@ -177,15 +180,15 @@ describe('GET /solar-metrics', () => {
       // Act
       const response = await request(app)
         .get('/solar-metrics')
-        .send({
+        .query({
           address,
           energyConsumptionKwh: 'not-an-array',
-          spentMoney
+          spentMoney: JSON.stringify(spentMoney)
         })
         .expect(400);
 
       // Assert
-      expect(response.body.error).toBe("O campo 'spentEnergyKwh' deve ser uma lista com 3 valores");
+      expect(response.body.error).toBe(ERROR_MESSAGES.INVALID_ENERGY_CONSUMPTION_KWH);
     });
 
     it('deve retornar 400 quando energyConsumptionKwh é um array vazio', async () => {
@@ -196,15 +199,15 @@ describe('GET /solar-metrics', () => {
       // Act
       const response = await request(app)
         .get('/solar-metrics')
-        .send({
+        .query({
           address,
-          energyConsumptionKwh: [],
-          spentMoney
+          energyConsumptionKwh: JSON.stringify([]),
+          spentMoney: JSON.stringify(spentMoney)
         })
         .expect(400);
 
       // Assert
-      expect(response.body.error).toBe("O campo 'spentEnergyKwh' deve ser uma lista com 3 valores");
+      expect(response.body.error).toBe(ERROR_MESSAGES.ENERGY_CONSUMPTION_REQUIRED);
     });
 
     it('deve retornar 400 quando spentMoney não é fornecido', async () => {
@@ -215,14 +218,14 @@ describe('GET /solar-metrics', () => {
       // Act
       const response = await request(app)
         .get('/solar-metrics')
-        .send({
+        .query({
           address,
-          energyConsumptionKwh
+          energyConsumptionKwh: JSON.stringify(energyConsumptionKwh)
         })
         .expect(400);
 
       // Assert
-      expect(response.body.error).toBe("O campo 'spentMoney' deve ser uma lista com 3 valores");
+      expect(response.body.error).toBe(ERROR_MESSAGES.SPENT_MONEY_REQUIRED);
       expect(geocoding.getCoordinates).not.toHaveBeenCalled();
     });
 
@@ -234,15 +237,15 @@ describe('GET /solar-metrics', () => {
       // Act
       const response = await request(app)
         .get('/solar-metrics')
-        .send({
+        .query({
           address,
-          energyConsumptionKwh,
+          energyConsumptionKwh: JSON.stringify(energyConsumptionKwh),
           spentMoney: 'not-an-array'
         })
         .expect(400);
 
       // Assert
-      expect(response.body.error).toBe("O campo 'spentMoney' deve ser uma lista com 3 valores");
+      expect(response.body.error).toBe(ERROR_MESSAGES.INVALID_SPENT_MONEY);
     });
 
     it('deve retornar 400 quando spentMoney é um array vazio', async () => {
@@ -253,15 +256,15 @@ describe('GET /solar-metrics', () => {
       // Act
       const response = await request(app)
         .get('/solar-metrics')
-        .send({
+        .query({
           address,
-          energyConsumptionKwh,
-          spentMoney: []
+          energyConsumptionKwh: JSON.stringify(energyConsumptionKwh),
+          spentMoney: JSON.stringify([])
         })
         .expect(400);
 
       // Assert
-      expect(response.body.error).toBe("O campo 'spentMoney' deve ser uma lista com 3 valores");
+      expect(response.body.error).toBe(ERROR_MESSAGES.SPENT_MONEY_REQUIRED);
     });
 
     it('deve retornar 400 quando o body está vazio', async () => {
@@ -318,10 +321,10 @@ describe('GET /solar-metrics', () => {
       // Act
       const response = await request(app)
         .get('/solar-metrics')
-        .send({
+        .query({
           address,
-          energyConsumptionKwh,
-          spentMoney
+          energyConsumptionKwh: JSON.stringify(energyConsumptionKwh),
+          spentMoney: JSON.stringify(spentMoney)
         })
         .expect(400);
 
@@ -367,15 +370,15 @@ describe('GET /solar-metrics', () => {
       // Act
       const response = await request(app)
         .get('/solar-metrics')
-        .send({
+        .query({
           address,
-          energyConsumptionKwh,
-          spentMoney
+          energyConsumptionKwh: JSON.stringify(energyConsumptionKwh),
+          spentMoney: JSON.stringify(spentMoney)
         })
         .expect(400);
 
       // Assert
-      expect(response.body.error).toBe(mockSolarResponse.error.message);
+      expect(response.body.error).toBe(ERROR_MESSAGES.SOLAR_FAILED);
       expect(geocoding.getCoordinates).toHaveBeenCalledTimes(1);
       expect(solar.getSolarPotential).toHaveBeenCalledTimes(1);
     });
@@ -408,10 +411,10 @@ describe('GET /solar-metrics', () => {
       // Act
       const response = await request(app)
         .get('/solar-metrics')
-        .send({
+        .query({
           address,
-          energyConsumptionKwh,
-          spentMoney
+          energyConsumptionKwh: JSON.stringify(energyConsumptionKwh),
+          spentMoney: JSON.stringify(spentMoney)
         })
         .expect(400);
 
