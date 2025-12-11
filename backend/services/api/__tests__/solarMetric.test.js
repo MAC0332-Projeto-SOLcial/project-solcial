@@ -1,3 +1,5 @@
+const { ERROR_MESSAGES } = require('../../../utils/enums');
+
 const request = require('supertest');
 const express = require('express');
 const solarMetricsRouter = require('../../../routes/solar-metrics');
@@ -32,43 +34,43 @@ jest.mock('../../../services/api/solarMetrics', () => {
 
 describe('GET /solar-metrics', () => {
   it('deve retornar erro se o payload estiver vazio', async () => {
-    const res = await request(app).get('/solar-metrics').send({});
+    const res = await request(app).get('/solar-metrics').query({});
     expect(res.statusCode).toBe(400);
     expect(res.body.error).toBeDefined();
   });
 
   it('deve retornar erro se faltar address', async () => {
-    const res = await request(app).get('/solar-metrics').send({
-      energyConsumptionKwh: [100],
-      spentMoney: [200]
+    const res = await request(app).get('/solar-metrics').query({
+      energyConsumptionKwh: JSON.stringify([100]),
+      spentMoney: JSON.stringify([200])
     });
     expect(res.statusCode).toBe(400);
-    expect(res.body.error).toMatch("O campo 'address' é obrigatório");
+    expect(res.body.error).toMatch(ERROR_MESSAGES.ADDRESS_REQUIRED);
   });
 
   it('deve retornar erro se faltar energyConsumptionKwh', async () => {
-    const res = await request(app).get('/solar-metrics').send({
+    const res = await request(app).get('/solar-metrics').query({
       address: 'Rua Exemplo, 123',
-      spentMoney: [200]
+      spentMoney: JSON.stringify([200])
     });
     expect(res.statusCode).toBe(400);
-    expect(res.body.error).toMatch("O campo 'spentEnergyKwh' deve ser uma lista com 3 valores");
+    expect(res.body.error).toMatch(ERROR_MESSAGES.ENERGY_CONSUMPTION_REQUIRED);
   });
 
   it('deve retornar erro se faltar spentMoney', async () => {
-    const res = await request(app).get('/solar-metrics').send({
+    const res = await request(app).get('/solar-metrics').query({
       address: 'Rua Exemplo, 123',
-      energyConsumptionKwh: [100]
+      energyConsumptionKwh: JSON.stringify([100])
     });
     expect(res.statusCode).toBe(400);
-    expect(res.body.error).toMatch("O campo 'spentMoney' deve ser uma lista com 3 valores");
+    expect(res.body.error).toMatch(ERROR_MESSAGES.SPENT_MONEY_REQUIRED);
   });
 
   it('deve retornar dados de métricas solares em caso de sucesso', async () => {
-    const res = await request(app).get('/solar-metrics').send({
+    const res = await request(app).get('/solar-metrics').query({
       address: 'Rua Exemplo, 123',
-      energyConsumptionKwh: [100],
-      spentMoney: [200]
+      energyConsumptionKwh: JSON.stringify([100]),
+      spentMoney: JSON.stringify([200])
     });
     expect(res.statusCode).toBe(200);
     expect(res.body.formattedAddress).toBeDefined();
