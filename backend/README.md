@@ -2,37 +2,9 @@
 
 API backend para integração com **Google Solar API**, fornecendo informações sobre potencial solar de edifícios e geocodificação de endereços.
 
-## 📋 Índice
+> **Nota:** Para instruções de instalação e configuração inicial, consulte o [README principal](../README.md).
 
-- [Pré-requisitos](#pré-requisitos)
-- [Instalação](#instalação)
-- [Configuração](#configuração)
-- [Uso](#uso)
-- [Endpoints](#endpoints)
-- [Testes](#testes)
-
-
-## 📦 Pré-requisitos
-
-- Node.js (versão 14 ou superior)
-- npm ou yarn
-- Chave de API do Google Cloud Platform com as seguintes APIs habilitadas:
-  - Google Solar API
-  - Google Geocoding API
-
-## 🚀 Instalação
-
-1. Clone o repositório e navegue até a pasta do backend:
-```bash
-cd backend
-```
-
-2. Instale as dependências:
-```bash
-npm install
-```
-
-## ⚙️ Configuração
+## Configuração
 
 1. Copie o arquivo `.env.example` para `.env`:
 ```bash
@@ -44,23 +16,22 @@ cp .env.example .env
 ```env
 # Chave da API do Google Cloud Platform
 GCLOUD_API_KEY=chave_api_aqui
+
+# URLs das APIs (valores padrão, podem ser omitidos)
+GOOGLE_SOLAR_API_URL=https://solar.googleapis.com/v1
+GOOGLE_GEOCODING_API_URL=https://maps.googleapis.com
+
+# Porta do servidor
+PORT=3001
 ```
 
 **Nota:** O arquivo `.env` não deve ser commitado no repositório. Use o `.env.example` como referência para as variáveis necessárias.
 
-## 💻 Uso
-
-Inicie o servidor:
-
-```bash
-npm start
-```
-
-O servidor estará disponível em `http://localhost:3000` (ou na porta configurada no `.env`).
+O servidor estará disponível em `http://localhost:3001` após executar `npm start`.
 
 
 
-## 📡 Endpoints
+## Endpoints
 
 ### `GET /`
 
@@ -86,6 +57,8 @@ Converte um endereço em coordenadas geográficas.
 }
 ```
 
+**Nota:** Este endpoint aceita um body JSON mesmo sendo um método GET.
+
 **Resposta de sucesso (200):**
 ```json
 {
@@ -109,6 +82,38 @@ Busca informações sobre o potencial solar de um edifício baseado em coordenad
 }
 ```
 
+**Nota:** Este endpoint aceita um body JSON mesmo sendo um método GET.
+
+---
+
+### `GET /solar-metrics`
+
+Endpoint principal que combina geocodificação e análise solar, retornando métricas completas.
+
+**Query Parameters:**
+- `address` (string, obrigatório) - Endereço a ser analisado
+- `energyConsumptionKwh` (string JSON, obrigatório) - Array com consumo de energia em kWh (ex: `"[100, 120, 110]"`)
+- `spentMoney` (string JSON, obrigatório) - Array com valores gastos em reais (ex: `"[500, 600, 550]"`)
+- `numPanels` (number, opcional) - Número de painéis solares (padrão: 1)
+
+**Exemplo de requisição:**
+```
+GET /solar-metrics?address=Av.%20Paulista,%201000,%20S%C3%A3o%20Paulo,%20SP&energyConsumptionKwh=[100,120,110]&spentMoney=[500,600,550]&numPanels=1
+```
+
+**Resposta de sucesso (200):**
+```json
+{
+  "formattedAddress": "Av. Paulista, 1000 - Bela Vista, São Paulo - SP, 01310-100, Brasil",
+  "maxPanels": 42,
+  "solarMetrics": {
+    "annualEnergyGeneration": 1800,
+    "annualSavings": 900,
+    "carbonOffset": 0.9
+  }
+}
+```
+
 **Resposta de sucesso (200):**
 ```json
 {
@@ -120,7 +125,7 @@ Busca informações sobre o potencial solar de um edifício baseado em coordenad
 }
 ```
 
-## 🧪 Testes
+## Testes
 
 Execute os testes unitários:
 

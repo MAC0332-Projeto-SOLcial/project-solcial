@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders SOLCial app', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  // Verifica se o heading principal da homepage está presente
+  const headingElement = screen.getByText(/Descubra o potencial solar/i);
+  expect(headingElement).toBeInTheDocument();
 });
